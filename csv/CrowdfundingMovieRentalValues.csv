@@ -1,0 +1,3 @@
+# Value ID,# Type,# Price Min,# Price Max,# Price Default,# Expected Min,# Expected Max,# Expected Default
+1,crowdfunding,100,1000,500,10,100,50
+2,movierental,1000,15000,10000,1,10,5

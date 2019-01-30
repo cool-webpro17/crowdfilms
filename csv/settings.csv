@@ -1,0 +1,11 @@
+﻿conDaysMin,1
+conDaysMax,20
+sepDaysMin,1
+sepDaysMax,20
+crowdFundersDefault,100
+crowdFundersMin,10
+crowdFundersMax,500
+crowdIndiPriceDefault,10
+crowdIndiPriceMin,1
+crowdIndiPriceMax,25
+crowdFundMargin,0.91

@@ -1,0 +1,18 @@
+# question answer id,# question id,# answer,# next question id
+1,1,Full Movie,2
+2,1,Aftermovie,2
+3,2,Theater,3
+4,2,Concert,3
+5,2,Volleybal,3
+6,3,Yes,7
+7,3,No,4
+8,4,Yes,5
+9,4,No,6
+10,5,1,7
+11,5,2,7
+12,5,3,7
+13,5,4,7
+14,9,Yes,10
+15,9,No,11
+16,11,Yes,12
+17,11,No,13
