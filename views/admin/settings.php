@@ -117,7 +117,7 @@ $export_options =  Yii::$app->params['adminTools']['export'];
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary btn-save-confirm">Save</button>
+                <button type="button" class="btn btn-primary btn-save-confirm">Yes</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
             </div>
         </div><!-- /.modal-content -->
