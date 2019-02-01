@@ -245,13 +245,15 @@ class AdminController extends Controller
             'password' => $data['password'],
         ];
 
-        Yii::$app->mailer
+        $success =Yii::$app->mailer
             ->compose('resend_password')
             ->setGlobalMergeVars($vars)
             ->setTo($data['username'])
             ->setFrom('team@crowdfilms.be')
             ->setReplyTo('team@crowdfilms.be')
             ->send();
+
+        return Yii::$app->api->_sendResponse(200, $success, true);
     }
 
     public function actionActivity_log() {

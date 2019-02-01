@@ -104,6 +104,26 @@ $export_options =  Yii::$app->params['adminTools']['export'];
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
+<div id="resend-confirm" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Confirmation</h4>
+            </div>
+            <div class="modal-body">
+                <div class="text-center">
+                    Do you want to send the email with reset password?
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary btn-save-confirm">Save</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 <script>
     function request(url, requestData, callback) {
         $.ajax({
@@ -121,6 +141,10 @@ $export_options =  Yii::$app->params['adminTools']['export'];
     }
 
     $(document).ready(function(){
+        var resendRequest = {
+            'username': '',
+            'password': ''
+        };
         $('.btn-add-admin').on('click', function(){
             $('#admin-create').modal('show');
         });
@@ -166,15 +190,15 @@ $export_options =  Yii::$app->params['adminTools']['export'];
             request('/admin/remove_admin', jsonRequest);
         });
         $('.btn-resend').on('click', function() {
-            var username = $(this).parent().parent().find('td:first-child').html();
-            var password = $(this).parent().parent().find('td:nth-child(2)').html();
+            resendRequest.username = $(this).parent().parent().find('td:first-child').html();
+            resendRequest.password = $(this).parent().parent().find('td:nth-child(2)').html();
 
-            var jsonRequest = {
-                'username': username,
-                'password': password
-            };
-
-            request('/admin/resend_email', jsonRequest);
+            $('#resend-confirm').modal('show');
+        });
+        $('.btn-save-confirm').on('click', function() {
+            request('/admin/resend_email', resendRequest, function() {
+                $('#resend-confirm').modal('hide');
+            });
         });
     });
 </script>
