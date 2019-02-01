@@ -27,7 +27,15 @@ class AdminUser extends \yii\db\ActiveRecord
      */
     public function rules()
     {
-        return [];
+        return [
+            [['username', 'password'], 'required'],
+            [['username', 'password'], 'string'],
+        ];
+    }
+
+    public static function primaryKey()
+    {
+        return ['username'];
     }
 
     /**

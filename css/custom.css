@@ -7760,3 +7760,11 @@ table thead .checkbox.radio { margin-top:-7px;margin-top:-21px; }
 .margin-right-30 {
   margin-right: 30px;
 }
+
+.modal-body input {
+  border: 1px solid;
+}
+
+.modal-body input:focus {
+  border: 1px solid !important; ;
+}

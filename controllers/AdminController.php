@@ -34,7 +34,11 @@ class AdminController extends Controller
                         'actions' => [
                             'index',
                             'login' => ['post'],
-                            'upload' => ['post']
+                            'upload' => ['post'],
+                            'save_admin' => ['post'],
+                            'remove_admin' => ['post'],
+                            'resend_email' => ['post'],
+                            'activity_log' => ['post']
                         ],
                         'allow' => false,
                     ]
@@ -81,7 +85,7 @@ class AdminController extends Controller
             $requestData = Yii::$app->request->post();
             $user = AdminUser::find()->where(['username' => $requestData['username']])->one();
             if (isset($user)) {
-                if ($user->password == md5($requestData['pass']))
+                if ($user->password == base64_encode($requestData['pass']))
                 {
                     Yii::$app->session->set('admin', 'adminUnlocked');
                     $vars['action'] = 'adminUnlocked';
@@ -105,7 +109,8 @@ class AdminController extends Controller
     public function actionSettings()
     {
         $model = new UploadForm;
-        $vars = ['cookies' => Yii::$app->request->cookies, 'model' => $model, 'action' => 'adminLocked'];
+        $dataProvider = AdminUser::find()->all();
+        $vars = ['cookies' => Yii::$app->request->cookies, 'model' => $model, 'action' => Yii::$app->session->get('admin'), 'dataProvider' => $dataProvider];
 
         if (Yii::$app->session->get('admin') == null || Yii::$app->session->get('admin') == "adminLocked") {
             return $this->render('adminLocked', $vars);
@@ -118,8 +123,6 @@ class AdminController extends Controller
     {
         $model = new UploadForm;
         $dataProvider = FixedValues::find()->all();
-//        $searchModel = new FixedValues;
-//        $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
         $vars = ['cookies' => Yii::$app->request->cookies, 'model' => $model, 'action' => Yii::$app->session->get('admin'), 'dataProvider' => $dataProvider];
 
 //        VarDumper::dump($dataProvider);
@@ -206,6 +209,54 @@ class AdminController extends Controller
 
 
         // return $this->render('pricing', $vars);
+    }
+
+    public function actionSave_admin() {
+        $data = Yii::$app->api->handleRequest();
+
+        $adminUser = AdminUser::find()->where(['username' => $data['username']])->one();
+
+        if ($adminUser) {
+            $adminUser->password = base64_encode($data['password']);
+            $adminUser->save();
+        } else {
+            $adminUser = new AdminUser();
+            $adminUser->username = $data['username'];
+            $adminUser->password = base64_encode($data['password']);
+            $adminUser->save();
+        }
+
+        return $this->redirect(['admin/settings']);
+    }
+
+    public function actionRemove_admin() {
+        $data = Yii::$app->api->handleRequest();
+
+        $adminUser = AdminUser::find()->where(['username' => $data['username']])->one();
+        $adminUser->delete();
+
+        return $this->redirect(['admin/settings']);
+    }
+
+    public function actionResend_email() {
+        $data = Yii::$app->api->handleRequest();
+
+        $vars = [
+            'password' => $data['password'],
+        ];
+
+        Yii::$app->mailer
+            ->compose('resend_password')
+            ->setGlobalMergeVars($vars)
+            ->setTo($data['username'])
+            ->setFrom('team@crowdfilms.be')
+            ->setReplyTo('team@crowdfilms.be')
+            ->send();
+    }
+
+    public function actionActivity_log() {
+        $data = Yii::$app->api->handleRequest();
+
     }
 
     public function actionExport()

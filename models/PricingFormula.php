@@ -131,24 +131,24 @@ class PricingFormula extends DefaultModel
         ];
     }
 
-     public static function getPricingFormula($data)
+    public static function getPricingFormula($data)
     {
         return static::find()->where(['kind' => $data['filmType'], 'type' => $data['eventType'], 'hours' => $data['hours']])->one();
     }
 
     public static function calculateTotalPrice($data)
     {
-        $formula        = static::getPricingFormula($data);
-        $filmFormula    = $data['filmFormula'];
-        $oneDayChoice   = $data['oneDayChoice'];
-        $conDaysChoice  = $data['conDaysChoice'];
-        $conDays        = $data['conDays'];
-        $sepDays        = $data['sepDays'];
-        $hours          = $data['hours'];
+        $formula = static::getPricingFormula($data);
+        $filmFormula = $data['filmFormula'];
+        $oneDayChoice = $data['oneDayChoice'];
+        $conDaysChoice = $data['conDaysChoice'];
+        $conDays = $data['conDays'];
+        $sepDays = $data['sepDays'];
+        $hours = $data['hours'];
 
         $price = 0;
         $attribute = ($oneDayChoice == 'Yes' ? '1' : ($conDaysChoice == 'Yes' ? $conDays : '1')) . 'Day' . $filmFormula;
-        
+
         $total = $formula->{$attribute};
         
         if($oneDayChoice != 'Yes' && $conDaysChoice != 'Yes')
@@ -158,8 +158,8 @@ class PricingFormula extends DefaultModel
 
         return $total;
     }
-	
-	public static function getPk()
+
+    public static function getPk()
     {
         return 'pricing_formula_id';
     }
