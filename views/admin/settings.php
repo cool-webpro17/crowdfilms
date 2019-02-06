@@ -9,6 +9,8 @@ $this->title = 'Crowdfilms - Admin';
 $upload_options =  Yii::$app->params['adminTools']['upload'];
 $export_options =  Yii::$app->params['adminTools']['export'];
 ?>
+<input type="hidden" class="username" value="<?php echo $username; ?>" />
+
 <div class="x_panel">
     <div class="x_title">
         <h2>
@@ -52,6 +54,20 @@ $export_options =  Yii::$app->params['adminTools']['export'];
             </tbody>
 
         </table>
+    </div>
+</div>
+
+<div class="x_panel">
+    <div class="x_title">
+        <h2>
+            Export Activity Log
+        </h2>
+        <div class="clearfix"></div>
+    </div>
+    <div class="x_content">
+        <div>
+            <a class="btn btn-success btn-export-activity" href="/admin/export_activity"> Export User Activity</a>
+        </div>
     </div>
 </div>
 <div id="admin-create" class="modal fade">
@@ -141,6 +157,11 @@ $export_options =  Yii::$app->params['adminTools']['export'];
     }
 
     $(document).ready(function(){
+        var username = $('.username').val();
+        var jsonLog = {
+            'username': username,
+            'action': ''
+        };
         var resendRequest = {
             'username': '',
             'password': ''
@@ -155,6 +176,8 @@ $export_options =  Yii::$app->params['adminTools']['export'];
                 'username': username,
                 'password': password
             };
+            jsonLog.action = 'Add Admin User';
+            request('/admin/activity_log', jsonLog);
             request('/admin/save_admin', jsonRequest, function () {
                 $('#admin-create').modal('hide');
             });
@@ -165,6 +188,8 @@ $export_options =  Yii::$app->params['adminTools']['export'];
             $('#admin-edit').modal('show');
             $('#admin-edit').find("input[name='username']").val(username);
             $('#admin-edit').find("input[name='password']").val(password);
+            jsonLog.action = 'Edit Admin User';
+            request('/admin/activity_log', jsonLog);
         });
         $('.btn-save-admin').on('click', function() {
             var username = $('#admin-edit').find("input[name='username']").val();
@@ -177,6 +202,8 @@ $export_options =  Yii::$app->params['adminTools']['export'];
             request('/admin/save_admin', jsonRequest, function () {
                 $('#admin-create').modal('hide');
             });
+            jsonLog.action = 'Save Admin User';
+            request('/admin/activity_log', jsonLog);
         });
         $('.btn-remove-admin').on('click', function() {
             var username = $(this).parent().parent().find('td:first-child').html();
@@ -188,6 +215,8 @@ $export_options =  Yii::$app->params['adminTools']['export'];
             console.log('jsonRequest', jsonRequest);
 
             request('/admin/remove_admin', jsonRequest);
+            jsonLog.action = 'Remove Admin User';
+            request('/admin/activity_log', jsonLog);
         });
         $('.btn-resend').on('click', function() {
             resendRequest.username = $(this).parent().parent().find('td:first-child').html();
@@ -198,13 +227,13 @@ $export_options =  Yii::$app->params['adminTools']['export'];
         $('.btn-save-confirm').on('click', function() {
             request('/admin/resend_email', resendRequest, function() {
                 $('#resend-confirm').modal('hide');
+                jsonLog.action = 'Resend Admin Password';
+                request('/admin/activity_log', jsonLog);
             });
+        });
+        $('.btn-export-activity').on('click', function() {
+            jsonLog.action = 'Export Activity Log';
+            request('/admin/activity_log', jsonLog);
         });
     });
 </script>
-
-<style>
-    input {
-        border: 1px solid;
-    }
-</style>

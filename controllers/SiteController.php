@@ -78,26 +78,10 @@ class SiteController extends Controller
     public function actionLogin()
     {
         Yii::$app->session->set('admin', 'adminLocked');
+        Yii::$app->session->set('username', null);
         $model = new UploadForm;
         $vars = ['cookies' => Yii::$app->request->cookies, 'model' => $model, 'action' => 'adminLocked'];
 
-        $attributes = Yii::$app->utils->getUploadCSVAttributes();
-
-        foreach($attributes as $attribute)
-        {
-            if($file = UploadedFile::getInstance($model, $attribute))
-            {
-                $model->{$attribute} = UploadedFile::getInstance($model, $attribute);
-                if ($model->{$attribute}->extension == "csv" && $model->upload($attribute)) {
-                    Yii::$app->session->setFlash('success', 'File uploaded.');
-                }
-                else
-                {
-                    $model->addErrors();
-                    Yii::$app->session->setFlash('error', 'There was an error uploading your file.');
-                }
-            }
-        }
         $vars['model'] = $model;
 
         return $this->render('../admin/adminLocked', $vars);

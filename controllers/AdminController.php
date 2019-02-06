@@ -10,6 +10,7 @@ use app\models\UserAnswers;
 use app\models\UploadForm;
 use app\models\AdminUser;
 use app\models\FixedValues;
+use app\models\ActivityLog;
 use yii\web\UploadedFile;
 use yii2tech\csvgrid\CsvGrid;
 use yii\data\ArrayDataProvider;
@@ -34,11 +35,13 @@ class AdminController extends Controller
                         'actions' => [
                             'index',
                             'login' => ['post'],
+                            'signout' => ['post'],
                             'upload' => ['post'],
                             'save_admin' => ['post'],
                             'remove_admin' => ['post'],
                             'resend_email' => ['post'],
-                            'activity_log' => ['post']
+                            'activity_log' => ['post'],
+                            'export_activity' => ['get']
                         ],
                         'allow' => false,
                     ]
@@ -88,8 +91,15 @@ class AdminController extends Controller
                 if ($user->password == base64_encode($requestData['pass']))
                 {
                     Yii::$app->session->set('admin', 'adminUnlocked');
+                    Yii::$app->session->set('username', $requestData['username']);
+
+                    $activityLog = new ActivityLog();
+                    $activityLog-> username = $requestData['username'];
+                    $activityLog->action = 'Login';
+                    $activityLog->created_at = date('Y-m-d H:i:s');
+                    $activityLog->save();
+
                     $vars['action'] = 'adminUnlocked';
-                    
                 }
             }
         }
@@ -110,7 +120,7 @@ class AdminController extends Controller
     {
         $model = new UploadForm;
         $dataProvider = AdminUser::find()->all();
-        $vars = ['cookies' => Yii::$app->request->cookies, 'model' => $model, 'action' => Yii::$app->session->get('admin'), 'dataProvider' => $dataProvider];
+        $vars = ['cookies' => Yii::$app->request->cookies, 'model' => $model, 'action' => Yii::$app->session->get('admin'), 'dataProvider' => $dataProvider, 'username' => Yii::$app->session->get('username')];
 
         if (Yii::$app->session->get('admin') == null || Yii::$app->session->get('admin') == "adminLocked") {
             return $this->render('adminLocked', $vars);
@@ -123,7 +133,7 @@ class AdminController extends Controller
     {
         $model = new UploadForm;
         $dataProvider = FixedValues::find()->all();
-        $vars = ['cookies' => Yii::$app->request->cookies, 'model' => $model, 'action' => Yii::$app->session->get('admin'), 'dataProvider' => $dataProvider];
+        $vars = ['cookies' => Yii::$app->request->cookies, 'model' => $model, 'action' => Yii::$app->session->get('admin'), 'dataProvider' => $dataProvider, 'username' => Yii::$app->session->get('username')];
 
 //        VarDumper::dump($dataProvider);
 //        exit;
@@ -138,7 +148,7 @@ class AdminController extends Controller
     public function actionUserlog()
     {
         $model = new UploadForm;
-        $vars = ['cookies' => Yii::$app->request->cookies, 'model' => $model, 'action' => Yii::$app->session->get('admin')];
+        $vars = ['cookies' => Yii::$app->request->cookies, 'model' => $model, 'action' => Yii::$app->session->get('admin'), 'username' => Yii::$app->session->get('username')];
 
         if (Yii::$app->session->get('admin') == null || Yii::$app->session->get('admin') == 'adminLocked') {
             return $this->render('adminLocked', $vars);
@@ -148,32 +158,10 @@ class AdminController extends Controller
     }
 
     public function actionLogout() {
-        // $model = new UploadForm;
-        // $vars = ['cookies' => Yii::$app->request->cookies, 'model' => $model, 'action' => 'adminLocked'];
 
-        // $attributes = Yii::$app->utils->getUploadCSVAttributes();
-
-        // foreach($attributes as $attribute)
-        // {
-        //     if($file = UploadedFile::getInstance($model, $attribute))
-        //     {
-        //         $model->{$attribute} = UploadedFile::getInstance($model, $attribute);
-        //         if ($model->{$attribute}->extension == "csv" && $model->upload($attribute)) {
-        //             Yii::$app->session->setFlash('success', 'File uploaded.');
-        //         }
-        //         else
-        //         {
-        //             $model->addErrors();
-        //             Yii::$app->session->setFlash('error', 'There was an error uploading your file.');
-        //         }
-        //     }
-        // }
-        // $vars['model'] = $model;
-
-        // Yii::$app->session->set('admin', 'adminLocked');
-        // $this->actionIndex();
-
-        // return $this->render('adminLocked', $vars);
+//         $model = new UploadForm;
+//         $vars = ['cookies' => Yii::$app->request->cookies, 'model' => $model, 'action' => 'adminLocked'];
+//         return $this->render('adminLocked', $vars);
     }
 
     public function actionUpload()
@@ -259,6 +247,23 @@ class AdminController extends Controller
     public function actionActivity_log() {
         $data = Yii::$app->api->handleRequest();
 
+        $activityLog = new ActivityLog();
+        $activityLog->username = $data['username'];
+        $activityLog->action = $data['action'];
+        $activityLog->created_at = date('Y-m-d H:i:s');
+        $activityLog->save();
+
+        return Yii::$app->api->_sendResponse(200, $activityLog, true);
+    }
+
+    public function actionExport_activity() {
+        $exporter = new CsvGrid([
+            'query' => ActivityLog::find()->orderBy('username DESC'),
+            'columns' => [
+                'username', 'action', 'created_at'
+            ],
+        ]);
+        return $exporter->export()->send('activity_log.csv');
     }
 
     public function actionExport()
