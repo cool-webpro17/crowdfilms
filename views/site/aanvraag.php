@@ -264,7 +264,7 @@ toeschouwers</a></div>
             <div class="formulekader">
             <h4 class="heading-11">1</h4>
               <h4 class="heading-6">Gewoon is al <br>speciaal genoeg</h4>
-              <p class="paragraph-2">1 videograaf,<br>een opkomend en <br>gepassioneerd talent.<br><br></p><img src="images/Crowdfilms1.png" alt="" class="image">
+              <p class="paragraph-2">1 videograaf,<br>een opkomend en <br>gepassioneerd talent.<br></p><img src="images/Crowdfilms1.png" alt="" class="image">
               <br><br>
               <div class="questiondetail">Vanaf <b>349,9</b>€</div>
               <div class="w-embed"><a href="#" class="button w-button answer-button" data-id="filmFormula" data-answer="F1" data-next="eMail">Selecteren</a></div>
@@ -274,7 +274,7 @@ toeschouwers</a></div>
             <div class="formulekader">
             <h4 class="heading-11">2</h4>
               <h4 class="heading-6">Het mag net <br>iets meer zijn</h4>
-              <p class="paragraph-2">1 videograaf,<br>een professionele vakman.<br><br><br></p><img src="images/Crowdfilms2.png" alt="" class="image">
+              <p class="paragraph-2">1 cameraman,<br>een professionele vakman.<br><br></p><img src="images/Crowdfilms2.png" alt="" class="image">
               <br><br>
               <div class="questiondetail">Vanaf <b>1321,3</b>€</div>
               <div class="w-embed"><a href="#" class="button w-button answer-button" data-id="filmFormula" data-answer="F2" data-next="eMail">Selecteren</a></div>
@@ -284,7 +284,7 @@ toeschouwers</a></div>
             <div class="formulekader">
             <h4 class="heading-11">3</h4>
               <h4 class="heading-6">Er is veel te zien, <br>en veel te filmen</h4>
-              <p class="paragraph-2">1 of 2 videografen, bijkomende geluidsman indien gewenst,<br> opkomende talenten.</p><img src="images/Crowdfilms3.png" alt="" class="image">
+              <p class="paragraph-2">2 tot 3 koppige crew,<br> opkomende talenten.<br><br></p><img src="images/Crowdfilms3.png" alt="" class="image">
               <br><br>
               <div class="questiondetail">Vanaf <b>1615,5</b>€</div>
               <div class="w-embed"><a href="#" class="button w-button answer-button" data-id="filmFormula" data-answer="F3" data-next="eMail">Selecteren</a></div>
@@ -294,7 +294,7 @@ toeschouwers</a></div>
             <div class="formulekader">
             <h4 class="heading-11">4</h4>
               <h4 class="heading-6">Wij zien het groots <br>en hebben plannen</h4>
-              <p class="paragraph-2">1 of 2 videografen, <br>Tv-kwaliteit, <br>geluidsman indien gewenst, regisseur aanwezig.</p><img src="images/Crowdfilms4.png" alt="" class="image">
+              <p class="paragraph-2">3 tot 4 koppige crew, <br>Tv-kwaliteit, <br>regisseur aanwezig.</p><img src="images/Crowdfilms4.png" alt="" class="image">
               <br><br>
               <div class="questiondetail">Vanaf <b>4214,4</b>€</div>
               <div class="w-embed"><a href="#" class="button w-button answer-button" data-id="filmFormula" data-answer="F4" data-next="eMail">Selecteren</a></div>
