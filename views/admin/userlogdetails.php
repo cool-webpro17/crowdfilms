@@ -36,7 +36,6 @@ $export_options = Yii::$app->params['adminTools']['export'];
             <option value="In Progress"<?php if($eventType->event_status == 'In Progress'): ?> selected="selected"<?php endif; ?>>In Progress</option>
             <option value="Dealt with"<?php if($eventType->event_status == 'Dealt with'): ?> selected="selected"<?php endif; ?>>Dealt with</option>
         </select>
-            <a class="btn-save-event btn btn-success">Save</a>
         <div class="x_title">
             <h4>Details</h4>
         </div>
