@@ -102,7 +102,7 @@ class DataController extends Controller
                             $eventType->event_status = 'New';
                             $eventType->created_at  = date('Y-m-d H:i:s');
                             $eventType->save();
-                        } else {
+                        } else if ($eventType->event_status != 'Incomplete' && $data['value_id'] != 'eMail') {
                             $eventType->event_status = 'Updated';
                             $eventType->created_at  = date('Y-m-d H:i:s');
                             $eventType->save();
