@@ -2,6 +2,7 @@
 
 use yii\helpers\Url as Url;
 use yii\widgets\ActiveForm;
+
 // use yiister\gentelella\assets\Asset;
 
 // Asset::register($this);
@@ -9,65 +10,101 @@ use yii\widgets\ActiveForm;
 /* @var $this yii\web\View */
 
 $this->title = 'Crowdfilms - Admin';
-$upload_options =  Yii::$app->params['adminTools']['upload'];
-$export_options =  Yii::$app->params['adminTools']['export'];
+$upload_options = Yii::$app->params['adminTools']['upload'];
+$export_options = Yii::$app->params['adminTools']['export'];
 ?>
-<div>
-Userlog
-</div>
-<!-- 
-<div class="site-index">
+<input type="hidden" class="username" value="<?php echo $username; ?>"/>
 
-    <div class="jumbotron">
-        <h1>Crowdfilms - Admin tools</h1>
-
-        <div>
-	    	<h2> Cookies </h2>
-		    <p>
-		        User ID: <?=$cookies['user_id']?>
-		    </p>
-		    <p>
-		        Session ID: <?=$cookies['session_id']?>
-		    </p>
-		</div>
-		<br>
-        <h2 class="lead">Upload CSVs</h2>
-        <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]) ?>
-        	<?php
-				foreach($upload_options as $option):
-        	
-			?>
-				<div class="row text-center">
-	            	<?= $form->field($model, $option['attribute'])->fileInput() ?>
-	        	</div>
-        		
-			<?php 
-			    endforeach;
-
-			?>
-			
-			<div class="row">
-	            <p><button class="btn btn-lg btn-success">Submit</button></p>
-        	</div>
-		<?php ActiveForm::end() ?>
-
-
+<div class="x_panel">
+    <div class="x_title">
+        <h2>
+            User Log
+        </h2>
+        <div class="clearfix"></div>
     </div>
+    <div class="x_content">
+        <table class="table dataTable table-bordered table-striped table-hover">
+            <thead>
+            <tr>
+                <th>
+                    Event ID
+                </th>
+                <th>
+                    Event Status
+                </th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody class="tbody-fixed">
+            <?php
+            foreach ($userAnswers as $key => $userAnswer):
+                ?>
+                <tr>
+                    <td style="vertical-align: middle;">
+                        <?php
+                        $existFlag = false;
+                        foreach ($userAnswer as $row):
+                            ?>
+                            <?php if ($row['value_id'] == 'eMail') {
+                            echo $row['value'];
+                            $existFlag = true;
+                            break;
+                        } ?>
+                            <?php
+                        endforeach;
 
-    <div class="body-content">
-    	<div class="jumbotron">
-	        <p class="lead">Export Data</p>
-	        <?php
-					foreach($export_options as $option):
-				?>
-				<div class="row">
-	            	<p><a class="btn btn-lg btn-success" href="<?=$option['url']?>"><?=$option['label']?></a></p>
-	        	</div>
-	        		
-			<?php 
-			    endforeach;
-			?>
-		</div>
+                        ?>
+                        <?php
+                        if ($existFlag == false) {
+                            echo count($userAnswer);
+                        }
+                        ?>
+                    </td>
+                    <td style="vertical-align: middle;">
+                        <?php foreach($eventTypes as $eachEvent):
+                            if ($eachEvent->user_id == $key) {
+                                echo $eachEvent->event_status;
+                            }
+                            endforeach;
+                        ?>
+                    </td>
+                    <td>
+                        <a class="btn btn-success" onclick="eventDetails(<?php echo ($key); ?>)">Details</a>
+                    </td>
+                </tr>
+                <?php
+            endforeach;
+
+            ?>
+            </tbody>
+        </table>
     </div>
 </div>
- -->
+
+<script>
+    function request(url, requestData, callback) {
+        $.ajax({
+            url: url,
+            type: 'post',
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function (data) {
+                if (callback) {
+                    callback(data.data);
+                }
+            },
+            data: JSON.stringify(requestData)
+        });
+    }
+    function eventDetails(key) {
+        console.log ('key', key);
+        console.log('log ', <?php echo json_encode($userAnswers) ?>);
+        var userAnswers = <?php echo json_encode($userAnswers) ?>;
+        console.log('log', userAnswers[key]);
+        var jsonRequest = {
+            'key': key,
+            'userAnswer': userAnswers[key]
+        };
+        request('/admin/user_log_details', jsonRequest);
+    }
+</script>

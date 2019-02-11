@@ -8,6 +8,7 @@ use yii\web\Controller;
 use yii\web\Response;
 use yii\helpers\VarDumper;
 use app\models\UserAnswers;
+use app\models\EventType;
 use app\models\PricingFormula;
 use app\models\FixedValues;
 use app\models\CrowdfundingMovieRentalValue;
@@ -76,6 +77,28 @@ class DataController extends Controller
                 $model->created_at  = date('Y-m-d H:i:s');
                 $model->user_id     = $cookies['user_id']->value;
 
+                $eventType = EventType::find()->where(['user_id' => $cookies['user_id']->value])->one();
+                if ($eventType == null) {
+                    if ($data['value_id'] == 'eMail' && UserAnswers::find()->where(['value' => $data['value']])->one() != null) {
+                        $eventType = EventType::find()->where(['user_id' => UserAnswers::find()->where(['value' => $data['value']])->one()->user_id])->one();
+                        $eventType->event_status = 'Updated';
+                    } else {
+                        $eventType = new EventType();
+                        $eventType->user_id = $cookies['user_id']->value;
+                        $eventType->event_status = 'Incomplete';
+                        $eventType->save();
+                    }
+                } else {
+                    if ($data['value_id'] == 'eMail') {
+                        $eventType->event_status = 'New';
+                        $eventType->save();
+                    }
+                    if ($eventType->event_status == 'New' && $data['value_id'] != 'eMail') {
+                        $eventType->event_status = 'Updated';
+                        $eventType->save();
+                    }
+                }
+
                 $success  = $success && $model->save();
                 $errors[] = $model->getErrors();
             }
@@ -132,6 +155,11 @@ class DataController extends Controller
         $user_id    = $cookies['user_id']->value;
 
         $userAnswers = UserAnswers::findUserPricingValues($user_id);
+
+//        $eventType = EventType::find()->where(['user_id' => $user_id])->one();
+//        if ($eventType == null) {
+//            $eventType = new EventType();
+//        }
 
         $totalPrice     = PricingFormula::calculateTotalPrice($userAnswers);
 
