@@ -262,41 +262,53 @@ toeschouwers</a></div>
         <div class="formulles w-row">
           <div class="column-3 w-col w-col-3">
             <div class="formulekader">
+            <h4 class="heading-11">1</h4>
               <h4 class="heading-6">Gewoon is al <br>speciaal genoeg</h4>
-              <p class="paragraph-2">Prima kwaliteit, geleverd door gepassioneerde en opkomende talenten.</p><img src="images/Crowdfilms1.png" alt="" class="image">
+              <p class="paragraph-2">1 videograaf,<br>een opkomend en <br>gepassioneerd talent.<br><br></p><img src="images/Crowdfilms1.png" alt="" class="image">
+              <br><br>
+              <div class="questiondetail">Vanaf <b>349,9</b>€</div>
               <div class="w-embed"><a href="#" class="button w-button answer-button" data-id="filmFormula" data-answer="F1" data-next="eMail">Selecteren</a></div>
             </div>
           </div>
           <div class="column-3 w-col w-col-3">
             <div class="formulekader">
+            <h4 class="heading-11">2</h4>
               <h4 class="heading-6">Het mag net <br>iets meer zijn</h4>
-              <p class="paragraph-2">Het verschil tussen een professionele hobbyist en een echte vakman. </p><img src="images/Crowdfilms2.png" alt="" class="image">
+              <p class="paragraph-2">1 videograaf,<br>een professionele vakman.<br><br><br></p><img src="images/Crowdfilms2.png" alt="" class="image">
+              <br><br>
+              <div class="questiondetail">Vanaf <b>1321,3</b>€</div>
               <div class="w-embed"><a href="#" class="button w-button answer-button" data-id="filmFormula" data-answer="F2" data-next="eMail">Selecteren</a></div>
             </div>
           </div>
           <div class="column-3 w-col w-col-3">
             <div class="formulekader">
+            <h4 class="heading-11">3</h4>
               <h4 class="heading-6">Er is veel te zien, <br>en veel te filmen</h4>
-              <p class="paragraph-2">Twee paar ogen zien én filmen meer dan 10<br>vogels in de lucht. </p><img src="images/Crowdfilms3.png" alt="" class="image">
+              <p class="paragraph-2">1 of 2 videografen, bijkomende geluidsman indien gewenst,<br> opkomende talenten.</p><img src="images/Crowdfilms3.png" alt="" class="image">
+              <br><br>
+              <div class="questiondetail">Vanaf <b>1615,5</b>€</div>
               <div class="w-embed"><a href="#" class="button w-button answer-button" data-id="filmFormula" data-answer="F3" data-next="eMail">Selecteren</a></div>
             </div>
           </div>
           <div class="column-3 w-col w-col-3">
             <div class="formulekader">
+            <h4 class="heading-11">4</h4>
               <h4 class="heading-6">Wij zien het groots <br>en hebben plannen</h4>
-              <p class="paragraph-2">Jouw film moet écht indruk maken? <br>Say no more. </p><img src="images/Crowdfilms4.png" alt="" class="image">
+              <p class="paragraph-2">1 of 2 videografen, <br>Tv-kwaliteit, <br>geluidsman indien gewenst, regisseur aanwezig.</p><img src="images/Crowdfilms4.png" alt="" class="image">
+              <br><br>
+              <div class="questiondetail">Vanaf <b>4214,4</b>€</div>
               <div class="w-embed"><a href="#" class="button w-button answer-button" data-id="filmFormula" data-answer="F4" data-next="eMail">Selecteren</a></div>
             </div>
           </div>
         </div>
       </div>
       <div id="eMail" class="formcontainerprijs question-container hide-section">
-        <div class="question">Dat is alles wat we moeten weten! We berekenen nu de prijs.</div>
+        <div class="question">We berekenen nu de prijs.</div>
         <div class="questiondetail">Op welk e-mailadres mogen we jou daarover contacteren? We mailen je uitsluitend over deze berekening en jouw mailadres wordt niet toegevoegd aan een mailinglijst, beloofd.</div>
         <div class="html-embed-3 w-embed">
           <center><input type="email" class="inputfield w-input" maxlength="1000" placeholder="email" data-id="eMail"></center>
         </div>
-        <div class="w-embed"><a href="#" class="button w-button next-button" data-next="calculate">Toon mij de prijzen!</a></div>
+        <div class="w-embed"><a href="#" class="button w-button next-button" data-next="calculate">Volgende</a></div>
       </div>
       
        <div id="calculate" class="formcontainerprijs question-container hide-section" data-next="grandTotal">
@@ -410,7 +422,7 @@ toeschouwers</a></div>
       <div class="w-col w-col-4">
       </div>
       <div class="w-col w-col-4">
-        <div class="w-embed"><a href="#" class="reset bottom-reset button w-button">Reset</a></div>
+        <div class="w-embed"><a href="#" class="reset bottom-reset button w-button">Opnieuw beginnen</a></div>
       </div>
       <div class="w-col w-col-4">
       </div>
