@@ -132,7 +132,7 @@ $export_options = Yii::$app->params['adminTools']['export'];
                                 foreach ($userAnswer as $row):
                                     ?>
                                     <?php if ($row['value_id'] == 'eMail') {
-                                    echo $row['value_id'];
+                                    echo $row['value'];
                                     $existFlag = true;
                                     break;
                                 } ?>
