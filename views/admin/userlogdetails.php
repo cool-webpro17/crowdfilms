@@ -51,10 +51,10 @@ $export_options = Yii::$app->params['adminTools']['export'];
                         Timestamp
                     </th>
                     <th>
-                        Value
+                        Value ID
                     </th>
                     <th>
-                        Value ID
+                        Value
                     </th>
                 </tr>
                 </thead>
@@ -63,17 +63,17 @@ $export_options = Yii::$app->params['adminTools']['export'];
                 foreach ($userAnswer as $eachRow):
                     ?>
                     <tr>
-                        <td style="vertical-align: middle;">
+                        <td style="vertical-align: middle; width: 20%;">
                             <?php echo $eachRow['user_id']; ?>
                         </td>
-                        <td style="vertical-align: middle;">
+                        <td style="vertical-align: middle; width: 20%;">
                             <?php echo $eachRow['created_at']; ?>
                         </td>
-                        <td style="vertical-align: middle;">
-                            <?php echo $eachRow['value']; ?>
-                        </td>
-                        <td style="vertical-align: middle;">
+                        <td style="vertical-align: middle; width: 20%;">
                             <?php echo $eachRow['value_id']; ?>
+                        </td>
+                        <td style="vertical-align: middle; width: 40%;">
+                            <?php echo $eachRow['value']; ?>
                         </td>
                     </tr>
                     <?php
@@ -104,7 +104,7 @@ $export_options = Yii::$app->params['adminTools']['export'];
     }
 
     $(document).ready(function() {
-        $('.btn-save-event').on('click', function() {
+        $("select[name='eventType']").on('change', function() {
             var eventType = $("select[name='eventType']").val();
             var userId = <?php echo $key; ?>;
 
