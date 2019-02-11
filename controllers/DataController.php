@@ -68,6 +68,7 @@ class DataController extends Controller
         try
         {
             foreach ($requestData as $key => $data) {
+                date_default_timezone_set('Europe/Berlin');
 
                 if(!$data['value'] || !$data['value_id'])
                     continue;
