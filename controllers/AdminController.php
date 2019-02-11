@@ -354,6 +354,8 @@ class AdminController extends Controller
         $request = Yii::$app->request;
         $userId = $request->get('key');
 
+        $statusType = StatusType::find()->all();
+
         $userAnswers = UserAnswers::find()->all();
         $userAnswers = ArrayHelper::index($userAnswers, null, 'user_id');
 
@@ -392,6 +394,7 @@ class AdminController extends Controller
             'userAnswer' => $userAnswers[$userId],
             'key' => $userId,
             'eventType' => $eventType,
+            'statusType' => $statusType
         ];
 
         if (Yii::$app->session->get('admin') == null || Yii::$app->session->get('admin') == 'adminLocked') {
