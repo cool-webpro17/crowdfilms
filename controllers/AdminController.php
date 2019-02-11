@@ -12,6 +12,7 @@ use app\models\AdminUser;
 use app\models\FixedValues;
 use app\models\EventType;
 use app\models\ActivityLog;
+use app\models\StatusType;
 use yii\web\UploadedFile;
 use yii2tech\csvgrid\CsvGrid;
 use yii\data\ArrayDataProvider;
@@ -46,7 +47,9 @@ class AdminController extends Controller
                             'activity_log' => ['post'],
                             'export_activity' => ['get'],
                             'user_log_details' => ['post'],
-                            'save_event_type' => ['post']
+                            'save_event_type' => ['post'],
+                            'save_status' => ['post'],
+                            'remove_status' => ['post']
                         ],
                         'allow' => false,
                     ]
@@ -123,7 +126,14 @@ class AdminController extends Controller
     {
         $model = new UploadForm;
         $dataProvider = AdminUser::find()->all();
-        $vars = ['cookies' => Yii::$app->request->cookies, 'model' => $model, 'action' => Yii::$app->session->get('admin'), 'dataProvider' => $dataProvider, 'username' => Yii::$app->session->get('username')];
+        $statusType = StatusType::find()->all();
+        $vars = ['cookies' => Yii::$app->request->cookies,
+            'model' => $model,
+            'action' => Yii::$app->session->get('admin'),
+            'dataProvider' => $dataProvider,
+            'username' => Yii::$app->session->get('username'),
+            'statusType' => $statusType
+        ];
 
         if (Yii::$app->session->get('admin') == null || Yii::$app->session->get('admin') == "adminLocked") {
             return $this->render('adminLocked', $vars);
@@ -398,6 +408,24 @@ class AdminController extends Controller
         $eventType->save();
 
         return $this->redirect(['admin/userlogdetails', 'key' => $data['user_id']]);
+    }
+
+    public function actionSave_status() {
+        $data = Yii::$app->api->handleRequest();
+        $statusType = new StatusType();
+        $statusType->status_name = $data['statusName'];
+        $statusType->status_description = $data['statusDescription'];
+        $statusType->save();
+
+        return $this->redirect(['admin/settings']);
+    }
+
+    public function actionRemove_status() {
+        $data = Yii::$app->api->handleRequest();
+        $statusType = StatusType::find()->where(['status_name' => $data['statusName']])->one();
+        $statusType->delete();
+
+        return $this->redirect(['admin/settings']);
     }
 
     public function actionExport()
