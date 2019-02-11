@@ -153,7 +153,8 @@ class AdminController extends Controller
         $model = new UploadForm;
         $userAnswers = UserAnswers::find()->all();
         $userAnswers = ArrayHelper::index($userAnswers, null, 'user_id');
-        $eventTypes = EventType::find()->all();
+        $eventTypes = EventType::find()->orderBy(['created_at' => SORT_DESC])->all();
+
 //        $eventTypes = ArrayHelper::index($eventTypes, null, 'user_id');
 
 
@@ -184,9 +185,6 @@ class AdminController extends Controller
             }
 
         }
-
-//        VarDumper::dump($eventTypes);
-//        exit;
 
         $vars = [
             'cookies' => Yii::$app->request->cookies,

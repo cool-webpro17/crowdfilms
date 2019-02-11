@@ -36,48 +36,8 @@ $export_options = Yii::$app->params['adminTools']['export'];
             </tr>
             </thead>
             <tbody class="tbody-fixed">
-            <?php if (end($eventTypes)->event_status == 'Incomplete'):
-                $incompleteFlag = true;
-                foreach ($userAnswers as $key => $userAnswer):
-                    ?>
-                    <?php if ($key == end($eventTypes)->user_id): ?>
-                    <tr>
-                        <td style="vertical-align: middle;">
-                            <?php
-                            $existFlag = false;
-                            foreach ($userAnswer as $row):
-                                ?>
-                                <?php if ($row['value_id'] == 'eMail'):
-                                echo $row['value'];
-                                $existFlag = true;
-                                break;
-                            endif; ?>
-                                <?php
-                            endforeach;
-
-                            ?>
-                            <?php
-                            if ($existFlag == false):
-                                echo $userAnswer[count($userAnswer) - 1]['created_at'];
-                            endif;
-                            ?>
-                        </td>
-                        <td style="vertical-align: middle;">
-                            <?php
-                            echo end($eventTypes)->event_status;
-                            ?>
-                        </td>
-                        <td>
-                            <a class="btn btn-success" onclick="eventDetails(<?php echo ($key); ?>)">Details</a>
-                        </td>
-                    </tr>
-                <?php endif;
-                endforeach;
-                endif;?>
             <?php foreach ($eventTypes as $eachEvent):
-                if ($eachEvent->event_status == 'New' || $eachEvent->event_status == 'Updated'):
-                ?>
-            <?php
+
             foreach ($userAnswers as $key => $userAnswer):
                 ?>
                 <?php if ($key == $eachEvent->user_id):?>
@@ -113,51 +73,6 @@ $export_options = Yii::$app->params['adminTools']['export'];
                 </tr>
                 <?php endif;
             endforeach;
-                endif;
-            endforeach; ?>
-            <?php foreach ($eventTypes as $eachEvent):
-
-                if (($eachEvent->event_status != 'New' && $eachEvent->event_status != 'Updated') &&
-                    (!$incompleteFlag || $eachEvent->user_id != end($eventTypes)->user_id)
-                ):
-                    ?>
-                    <?php
-                    foreach ($userAnswers as $key => $userAnswer):
-                        ?>
-                        <?php if ($key == $eachEvent->user_id): ?>
-                        <tr>
-                            <td style="vertical-align: middle;">
-                                <?php
-                                $existFlag = false;
-                                foreach ($userAnswer as $row):
-                                    ?>
-                                    <?php if ($row['value_id'] == 'eMail') {
-                                    echo $row['value'];
-                                    $existFlag = true;
-                                    break;
-                                } ?>
-                                    <?php
-                                endforeach;
-
-                                ?>
-                                <?php
-                                if ($existFlag == false) {
-                                    echo $userAnswer[count($userAnswer) - 1]['created_at'];
-                                }
-                                ?>
-                            </td>
-                            <td style="vertical-align: middle;">
-                                <?php
-                                echo $eachEvent->event_status;
-                                ?>
-                            </td>
-                            <td>
-                                <a class="btn btn-success" onclick="eventDetails(<?php echo ($key); ?>)">Details</a>
-                            </td>
-                        </tr>
-                    <?php endif;
-                    endforeach;
-                    endif;
             endforeach; ?>
             </tbody>
         </table>

@@ -82,25 +82,29 @@ class DataController extends Controller
                     if ($data['value_id'] == 'eMail' && UserAnswers::find()->where(['value' => $data['value']])->one() != null) {
                         $eventType = EventType::find()->where(['user_id' => UserAnswers::find()->where(['value' => $data['value']])->one()->user_id])->one();
                         $eventType->event_status = 'Updated';
+                        $eventType->created_at  = date('Y-m-d H:i:s');
                         $eventType->save();
                     } else {
                         $eventType = new EventType();
                         $eventType->user_id = $cookies['user_id']->value;
                         $eventType->event_status = 'Incomplete';
+                        $eventType->created_at  = date('Y-m-d H:i:s');
                         $eventType->save();
                     }
                 } else {
                     if ($data['value_id'] == 'eMail' && UserAnswers::find()->where(['value' => $data['value']])->one() != null) {
                         $eventType = EventType::find()->where(['user_id' => UserAnswers::find()->where(['value' => $data['value']])->one()->user_id])->one();
                         $eventType->event_status = 'Updated';
+                        $eventType->created_at  = date('Y-m-d H:i:s');
                         $eventType->save();
                     } else {
                         if ($data['value_id'] == 'eMail') {
                             $eventType->event_status = 'New';
+                            $eventType->created_at  = date('Y-m-d H:i:s');
                             $eventType->save();
-                        }
-                        if ($eventType->event_status == 'New' && $data['value_id'] != 'eMail') {
+                        } else {
                             $eventType->event_status = 'Updated';
+                            $eventType->created_at  = date('Y-m-d H:i:s');
                             $eventType->save();
                         }
                     }

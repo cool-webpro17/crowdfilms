@@ -28,7 +28,7 @@ class EventType extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'event_status'], 'required'],
+            [['user_id', 'event_status', 'created_at'], 'required'],
             [['user_id'], 'integer'],
             [['event_status'], 'string'],
         ];
@@ -47,6 +47,13 @@ class EventType extends \yii\db\ActiveRecord
         return [
             'user_id' => 'User ID',
             'event_status' => 'Event Status',
+            'created_at' => 'Timestamp'
         ];
+    }
+
+    public function scopes() {
+        return array(
+            'created_at' => array('order' => 'status DESC'),
+        );
     }
 }
