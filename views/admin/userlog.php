@@ -56,7 +56,7 @@ $export_options = Yii::$app->params['adminTools']['export'];
                         ?>
                         <?php
                         if ($existFlag == false) {
-                            echo count($userAnswer);
+                            echo $userAnswer[count($userAnswer) - 1]['created_at'];
                         }
                         ?>
                     </td>
