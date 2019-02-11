@@ -82,6 +82,7 @@ class DataController extends Controller
                     if ($data['value_id'] == 'eMail' && UserAnswers::find()->where(['value' => $data['value']])->one() != null) {
                         $eventType = EventType::find()->where(['user_id' => UserAnswers::find()->where(['value' => $data['value']])->one()->user_id])->one();
                         $eventType->event_status = 'Updated';
+                        $eventType->save();
                     } else {
                         $eventType = new EventType();
                         $eventType->user_id = $cookies['user_id']->value;
@@ -89,13 +90,19 @@ class DataController extends Controller
                         $eventType->save();
                     }
                 } else {
-                    if ($data['value_id'] == 'eMail') {
-                        $eventType->event_status = 'New';
-                        $eventType->save();
-                    }
-                    if ($eventType->event_status == 'New' && $data['value_id'] != 'eMail') {
+                    if ($data['value_id'] == 'eMail' && UserAnswers::find()->where(['value' => $data['value']])->one() != null) {
+                        $eventType = EventType::find()->where(['user_id' => UserAnswers::find()->where(['value' => $data['value']])->one()->user_id])->one();
                         $eventType->event_status = 'Updated';
                         $eventType->save();
+                    } else {
+                        if ($data['value_id'] == 'eMail') {
+                            $eventType->event_status = 'New';
+                            $eventType->save();
+                        }
+                        if ($eventType->event_status == 'New' && $data['value_id'] != 'eMail') {
+                            $eventType->event_status = 'Updated';
+                            $eventType->save();
+                        }
                     }
                 }
 
