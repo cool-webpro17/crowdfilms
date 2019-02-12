@@ -92,7 +92,9 @@ $export_options = Yii::$app->params['adminTools']['export'];
                     <td data-name="password"
                         style="width:40%; vertical-align: middle;"><?php echo $eachData['status_description']; ?></td>
                     <td class="text-center">
-                        <a class="btn cursor-pointer btn-remove-status" onclick="removeStatus('<?php echo $eachData['status_name']; ?>')"><i class="fa fa-trash"></i></a>
+                        <?php if ($eachData['status_name'] != 'Incomplete' && $eachData['status_name'] != 'New' && $eachData['status_name'] != 'Updated'): ?>
+                        <a class="cursor-pointer btn-remove-status" onclick="removeStatus('<?php echo $eachData['status_name']; ?>')"><i class="fa fa-trash"></i></a>
+                        <?php endif; ?>
                     </td>
                 </tr>
             <?php endforeach; ?>
@@ -201,6 +203,14 @@ $export_options = Yii::$app->params['adminTools']['export'];
                 <div class="row">
                     <label class="col-md-4"><div class="text-right">Status Description: </div></label>
                     <input class="col-md-7" name="status_description"/>
+                </div>
+                <div class="row">
+                    <label class="col-md-4"><div class="text-right">This status will be placed before the status you want to create:</div></label>
+                    <select name="before_status" class="col-md-7">
+                        <?php foreach ($statusType as $eachStatus): ?>
+                            <option value="<?php echo $eachStatus['status_name']; ?>"><?php echo $eachStatus['status_name']; ?></option>
+                        <?php endforeach; ?>
+                    </select>
                 </div>
             </div>
             <div class="modal-footer">
@@ -319,9 +329,11 @@ $export_options = Yii::$app->params['adminTools']['export'];
         $('.btn-save-status').on('click', function () {
             var statusName = $('#status-create').find("input[name='status_name']").val();
             var statusDescription = $('#status-create').find("input[name='status_description']").val();
+            var beforeStatus = $('#status-create').find("select[name='before_status']").val();
             var jsonRequest = {
                 'statusName': statusName,
-                'statusDescription': statusDescription
+                'statusDescription': statusDescription,
+                'beforeStatus': beforeStatus
             };
             jsonLog.action = 'Add Status Type';
             request('/admin/activity_log', jsonLog);
@@ -331,3 +343,9 @@ $export_options = Yii::$app->params['adminTools']['export'];
         });
     });
 </script>
+
+<style>
+    .modal-dialog {
+        width: 800px;
+    }
+</style>

@@ -33,11 +33,6 @@ $export_options = Yii::$app->params['adminTools']['export'];
             <?php foreach ($statusType as $eachStatus): ?>
             <option value="<?php echo $eachStatus['status_name']; ?>"<?php if($eventType->event_status == $eachStatus['status_name']): ?> selected="selected"<?php endif; ?>><?php echo $eachStatus['status_name']; ?></option>
             <?php endforeach; ?>
-<!--            <option value="New"--><?php //if($eventType->event_status == 'New'): ?><!-- selected="selected"--><?php //endif; ?><!-->New</option>-->
-<!--            <option value="Incomplete"--><?php //if($eventType->event_status == 'Incomplete'): ?><!-- selected="selected"--><?php //endif; ?><!-->Incomplete</option>-->
-<!--            <option value="Updated"--><?php //if($eventType->event_status == 'Updated'): ?><!-- selected="selected"--><?php //endif; ?><!-->Updated</option>-->
-<!--            <option value="In Progress"--><?php //if($eventType->event_status == 'In Progress'): ?><!-- selected="selected"--><?php //endif; ?><!-->In Progress</option>-->
-<!--            <option value="Dealt with"--><?php //if($eventType->event_status == 'Dealt with'): ?><!-- selected="selected"--><?php //endif; ?><!-->Dealt with</option>-->
         </select>
         <div class="x_title">
             <h4>Details</h4>

@@ -418,7 +418,26 @@ class AdminController extends Controller
         $statusType = new StatusType();
         $statusType->status_name = $data['statusName'];
         $statusType->status_description = $data['statusDescription'];
+        $beforeStatusType = StatusType::find()->where(['status_name' => $data['beforeStatus']])->one();
+        $allStatusType = StatusType::find()->all();
+        $beforeKey = -1;
+        $tempStatusType = [];
+        foreach ($allStatusType as $key => $eachStatusType) {
+            if ($eachStatusType->status_name == $data['beforeStatus']) {
+                $beforeKey = $key;
+            }
+            if ($beforeKey != -1 && $key > $beforeKey) {
+                $tempStatusType[] = $eachStatusType;
+                $eachStatusType->delete();
+            }
+        }
         $statusType->save();
+        foreach ($tempStatusType as $eachStatusType) {
+            $statusType = new StatusType();
+            $statusType->status_name = $eachStatusType['status_name'];
+            $statusType->status_description = $eachStatusType['status_description'];
+            $statusType->save();
+        }
 
         return $this->redirect(['admin/settings']);
     }
