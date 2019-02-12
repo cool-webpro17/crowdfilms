@@ -205,7 +205,7 @@ $export_options = Yii::$app->params['adminTools']['export'];
                     <input class="col-md-7" name="status_description"/>
                 </div>
                 <div class="row">
-                    <label class="col-md-4"><div class="text-right">This status will be placed before the status you want to create:</div></label>
+                    <label class="col-md-4"><div class="text-right">This status will be placed AFTER the status you want to create: </div></label>
                     <select name="before_status" class="col-md-7">
                         <?php foreach ($statusType as $eachStatus): ?>
                             <option value="<?php echo $eachStatus['status_name']; ?>"><?php echo $eachStatus['status_name']; ?></option>
