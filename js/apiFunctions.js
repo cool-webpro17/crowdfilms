@@ -64,10 +64,18 @@ function calculateGrand()
 {
     var updatePrices = function(data)
     {
-        $( "input[data-id='grandTotal']" ).val(data.grandTotal);
+        console.log('data', data);
+        // $( "input[data-id='grandTotal']" ).val(data.grandTotal);
+        var formulaArray = [
+            'formulaOne', 'formulaTwo', 'formulaThree', 'formulaFour'
+        ];
         $("#calculate").fadeOut();
         nextQuestion($("#calculate"), $("#calculate").data('next'));
-        updateCrowdRentalPricing();
+        for (var i = 0; i < formulaArray.length; i++) {
+            $("#" + formulaArray[i]).html('Vanaf <b>' + data[formulaArray[i]] + '</b>€')
+            $("#" + formulaArray[i]).css('font-size', '20px');
+        }
+        // updateCrowdRentalPricing();
     };
 
     request('data/calculate', [], updatePrices);   
@@ -152,6 +160,7 @@ $(document).ready(function(){
             {
                 if(next == 'calculate')
                 {
+                    $('#eMail').css("display", "none");
                     calculateGrand();
                     $(document).find("input[data-id='email']").val($(document).find("input[data-id='eMail']").val());
                 } else if (next == 'crowdFunders') {
@@ -164,8 +173,7 @@ $(document).ready(function(){
                     var sepDays = $(document).find("input[data-id='sepDays']");
                     sepDays.css('background-color', '#ffffff');
                     nextQuestion($button, next);
-                } else
-                {
+                } else {
                     nextQuestion($button, next);
                 }
             } else {

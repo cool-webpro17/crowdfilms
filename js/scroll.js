@@ -13,18 +13,27 @@ function nextQuestion(element, nextId)
 		});
 	}
 
-	doScrolling(nextId);
-	
+        doScrolling(nextId);
+
 }
 
 function doScrolling(nextId)
 {
 	var $next = $('#' + nextId);
-	$next.fadeIn(100, function(){
-		$("html, body").animate({ 
-			scrollTop: $next.offset().top 
-		}, 500);
-	});
+    if (nextId == 'grandTotal') {
+        $next.fadeIn(100, function(){
+            $("html, body").animate({
+                scrollTop: $('#filmFormula').offset().top
+            }, 500);
+        });
+	} else {
+        $next.fadeIn(100, function(){
+            $("html, body").animate({
+                scrollTop: $next.offset().top
+            }, 500);
+        });
+	}
+
 }
 
 $(window).bind("mousewheel", function() {

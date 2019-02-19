@@ -159,6 +159,37 @@ class PricingFormula extends DefaultModel
         return $total;
     }
 
+    public static function calculateFormulaPrices($data) {
+        $formula = static::getPricingFormula($data);
+        $filmFormula = $data['filmFormula'];
+        $oneDayChoice = $data['oneDayChoice'];
+        $conDaysChoice = $data['conDaysChoice'];
+        $conDays = $data['conDays'];
+        $sepDays = $data['sepDays'];
+        $hours = $data['hours'];
+
+        $price = 0;
+        $attribute = ($oneDayChoice == 'Yes' ? '1' : ($conDaysChoice == 'Yes' ? $conDays : '1')) . 'Day';
+
+        $formulaPrices = [];
+        $formulaArray = [
+            'F1', 'F2', 'F3', 'F4'
+        ];
+        foreach ($formulaArray as $eachFormula) {
+            $formulaPrices[]= $total = $formula->{$attribute . $eachFormula};
+        }
+
+
+        if($oneDayChoice != 'Yes' && $conDaysChoice != 'Yes')
+        {
+            foreach ($formulaPrices as $key => &$eachFormulaPrice) {
+                $formulaPrices[$key] = intval($sepDays) * $formula->SepDayCo * $eachFormulaPrice;
+            }
+        }
+
+        return $formulaPrices;
+    }
+
     public static function getPk()
     {
         return 'pricing_formula_id';
