@@ -72,7 +72,7 @@ function calculateGrand()
         $("#calculate").fadeOut();
         nextQuestion($("#calculate"), $("#calculate").data('next'));
         for (var i = 0; i < formulaArray.length; i++) {
-            $("#" + formulaArray[i]).html('<b>' + data[formulaArray[i]] + '</b>€')
+            $("#" + formulaArray[i]).html('Berekende prijs:<br/>' + '<b>' + data[formulaArray[i]] + '</b>€')
             $("#" + formulaArray[i]).css('font-size', '20px');
         }
         // updateCrowdRentalPricing();
