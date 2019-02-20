@@ -578,7 +578,7 @@
                     <div class="text-block">Als je dat wilt, kunnen wij je telefonisch contacteren:</div>
                 </div>
                 <div class="w-col w-col-6">
-                    <div class="embed w-embed"><input type="email" class="inputfield w-input" maxlength="1000"
+                    <div class="embed w-embed"><input type="text" class="inputfield w-input" maxlength="1000"
                                                       placeholder="jouw tel. nr." data-id="tel"></div>
                 </div>
             </div>
@@ -587,7 +587,7 @@
                     <div class="text-block">Wil je nog iets toevoegen? </div>
                 </div>
                 <div class="w-col w-col-6">
-                    <div class="embed w-embed"><input type="comment" class="inputfield w-input" maxlength="10000"
+                    <div class="embed w-embed"><input type="text" class="inputfield w-input" maxlength="10000"
                                                       placeholder="jouw opmerking" data-id="comment"></div>
                 </div>
             </div>

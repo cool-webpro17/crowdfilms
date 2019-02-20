@@ -72,7 +72,7 @@ function calculateGrand()
         $("#calculate").fadeOut();
         nextQuestion($("#calculate"), $("#calculate").data('next'));
         for (var i = 0; i < formulaArray.length; i++) {
-            $("#" + formulaArray[i]).html('Vanaf <b>' + data[formulaArray[i]] + '</b>€')
+            $("#" + formulaArray[i]).html('<b>' + data[formulaArray[i]] + '</b>€')
             $("#" + formulaArray[i]).css('font-size', '20px');
         }
         // updateCrowdRentalPricing();
@@ -149,6 +149,18 @@ $(document).ready(function(){
     });
 
     updateQuestionsVisibility();
+
+    $(".inputfield").keyup(function(event) {
+        if (($(this).data('id') != 'eventStartDate')
+            && ($(this).data('id') != 'eventLocation')
+            && ($(this).attr('id') != 'tel')
+            && ($(this).data('id') != 'email')) {
+            if (event.keyCode == '13') {
+                console.log('enter Key pressed', event);
+                $(this).parent().parent().parent().find(".next-button").trigger('click');
+            }
+        }
+    });
 
     $(".answer-button, .next-button").click(function(){
 
