@@ -29,6 +29,7 @@ class DataController extends Controller
                     'email' => ['post', 'get'],
                     'save_fixed_value' => ['post'],
                     'remove_fixed_value' => ['post'],
+                    'formula_prices' => ['post'],
                 ],
             ],
         ];
@@ -214,6 +215,22 @@ class DataController extends Controller
 
         $errors = UserAnswers::insertRows($user_id, $data);
 
+        return Yii::$app->api->_sendResponse(200, $data, true);
+    }
+
+    public function actionFormula_prices() {
+        $cookies = Yii::$app->request->cookies;
+        $user_id = $cookies['user_id']->value;
+
+        $userAnswers = UserAnswers::findUserPricingValues($user_id);
+
+        $formulaPrices = PricingFormula::calculateFormulaPrices($userAnswers);
+        $data = [
+            'formulaOne' => $formulaPrices[0],
+            'formulaTwo' => $formulaPrices[1],
+            'formulaThree' => $formulaPrices[2],
+            'formulaFour' => $formulaPrices[3],
+        ];
         return Yii::$app->api->_sendResponse(200, $data, true);
     }
 

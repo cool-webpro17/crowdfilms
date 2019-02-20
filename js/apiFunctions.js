@@ -119,6 +119,19 @@ function updateAnswerSelection(id, answer)
         $(this).toggleClass('visited', $(this).data('answer') == answer || $(this).hasClass('next-button'));
     });
 
+    if (id == 'eMail') {
+        request('data/formula_prices', null, function(data) {
+            console.log('data', data);
+            var formulaArray = [
+                'formulaOne', 'formulaTwo', 'formulaThree', 'formulaFour'
+            ];
+            for (var i = 0; i < formulaArray.length; i++) {
+                $("#" + formulaArray[i]).html('Berekende prijs:<br/>' + '<b>' + data[formulaArray[i]] + '</b>€')
+                $("#" + formulaArray[i]).css('font-size', '20px');
+            }
+        });
+    }
+
     $container.find('input[data-id=' + id + ']').val(answer);
 }
 
