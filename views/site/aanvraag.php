@@ -182,8 +182,8 @@
 
     <div class="firstformcontainer question-container">
         <div id="eventType" class="question-container">
-            <div class="questiondetail margin-top-20">Top, dat is duidelijk.</div>
-            <div class="question">Een tweede belangrijke vraag: wat voor <strong>type event</strong> gaan we filmen? 
+            <div class="questiondetail margin-top-20">Ready? Set. De eerste vraag:</div>
+            <div class="question">Wat voor <strong>type event</strong> gaan we filmen? 
             </div>
             <div class="questiondetail">Op basis van het type event kunnen wij een inschatting maken van welk type crew
                 en materiaal nodig zal zijn.
@@ -233,7 +233,8 @@
             </div>
         </div>
         <div id="filmType" class="formcontainer question-container hide-section">
-            <div class="question">We starten bij het begin: wat voor <strong>type film</strong> heb je in gedachten?
+       		<div class="questiondetail margin-top-20">Dat ging goed. En hier is de volgende vraag al!</div>
+            <div class="question">Minstens even belangrijk: wat voor <strong>type film</strong> heb je in gedachten?
             </div>
             <div class="w-row">
                 <div class="w-col w-col-4">
@@ -261,7 +262,7 @@
             </div>
         </div>
         <div id="oneDayChoice" class="formcontainer question-container hide-section">
-            <div class="questiondetail">Type film? Check. Type event? Check. Dat gaat vlot!</div>
+            <div class="questiondetail">Weer een vraag verder: goed bezig jij!</div>
             <div class="question">Gaan de opnames op 1 of meerdere dagen door? </div>
             <div class="questiondetail">Que? We vragen dit om rekening te houden met de transportkosten van onze
                 crew. 
@@ -326,7 +327,7 @@
             </div>
         </div>
         <div id="hours" class="formcontainer question-container hide-section">
-            <div class="questiondetail">Yes chef! Kan het nog iets specifieker?</div>
+            <div class="questiondetail">Dit gaat vlot, dit gaat goed! Bijna de laatste vraag!</div>
             <div class="question">Hoeveel uur van jouw evenement gaan we opnemen? </div>
             <div class="questiondetail">Met andere woorden: hoelang dient onze crew daadwerkelijk achter de camera&#x27;s
                 te staan? 
@@ -342,7 +343,7 @@
             </div>
         </div>
         <div id="hoursdays" class="formcontainer question-container hide-section">
-            <div class="questiondetail">Yes chef! Kan het nog iets specifieker?</div>
+            <div class="questiondetail">Dit gaat vlot, dit gaat goed! Bijna de laatste vraag!</div>
             <div class="question">Hoeveel uur van jouw evenement gaan we gemiddeld per dag opnemen? </div>
             <div class="questiondetail">Met andere woorden: hoelang dient gemiddeld onze crew per dag daadwerkelijk
                 achter de camera&#x27;s te staan?
@@ -358,7 +359,7 @@
             </div>
         </div>
         <div id="customerType" class="formcontainer question-container hide-section">
-            <div class="questiondetail">Ok. We zijn er bijna...</div>
+            <div class="questiondetail">Zo gaat het goed, zo gaat het beter!</div>
             <div class="question">Wilt u boeken als particulier of als vereniging/bedrijf?</div>
 <!--            <div class="questiondetail">Dit geeft ons een idee van de omvang van jouw evenement</div>-->
             <div class="w-row">
@@ -404,7 +405,7 @@
 <!--                    toeschouwers</a></div>-->
 <!--        </div>-->
         <div id="filmFormula" class="formcontainer question-container hide-section">
-            <div class="questiondetail">De laatste vraag!</div>
+            <div class="questiondetail">De laatste vraag! Nu al? Nu al.</div>
             <div class="question"><strong>Welke formule</strong> past het best bij jou? </div>
             <div class="questiondetail">Wordt dit een kleinschalig project of zie je het écht groots? Wij bieden voor
                 ieder wat wils, samengevat in onderstaande formules:
@@ -461,7 +462,7 @@
             </div>
         </div>
         <div id="eMail" class="formcontainerprijs question-container hide-section">
-            <div class="question">We berekenen nu de prijs.</div>
+            <div class="question">Digitale magie is aan het werk om jouw prijzen te berekenen.</div>
             <div class="questiondetail">Op welk e-mailadres mogen we jou daarover contacteren? We mailen je uitsluitend
                 over deze berekening en jouw mailadres wordt niet toegevoegd aan een mailinglijst, beloofd.
             </div>
@@ -547,10 +548,7 @@
 <!--                           name="discount-total" data-id="discountTotal" readonly="">-->
 <!--                </center>-->
 <!--            </div>-->
-            <div class="questiondetail">Gaat jouw bijdrage in de min? Dan krijg je dat bedrag integraal doorgestort! Met
-                andere woorden: wanneer jouw crowdfund-actie meer opbrengt dan wat de film kost, verdien je er aan!
-            </div>
-            <div class="question">Klinkt goed? Deze prijsberekening bewaren?</div>
+                 <div class="question">Klinkt goed? Deze prijsberekening bewaren?</div>
             <div class="questiondetail">Aan de hand van onderstaande vragen bekijken wij geheel vrijblijvend voor jouw
                 de beschikbaarheid van een geschikte filmcrew. 
             </div>
