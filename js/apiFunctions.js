@@ -120,6 +120,7 @@ function updateAnswerSelection(id, answer)
     });
     $("a[data-next='calculate']").removeClass('visited');
     if (id == 'eMail') {
+
         request('data/formula_prices', null, function(data) {
             console.log('data', data);
             var formulaArray = [
@@ -130,6 +131,7 @@ function updateAnswerSelection(id, answer)
                 $("#" + formulaArray[i]).css('font-size', '20px');
             }
         });
+        $('#eMail').css('display', 'none');
     } else {
         $container.find('input[data-id=' + id + ']').val(answer);
     }
