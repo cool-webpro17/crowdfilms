@@ -118,7 +118,7 @@ function updateAnswerSelection(id, answer)
     $container.find('.answer-button, .next-button').each(function(){
         $(this).toggleClass('visited', $(this).data('answer') == answer || $(this).hasClass('next-button'));
     });
-
+    $("a[data-next='calculate']").removeClass('visited');
     if (id == 'eMail') {
         request('data/formula_prices', null, function(data) {
             console.log('data', data);
@@ -130,9 +130,9 @@ function updateAnswerSelection(id, answer)
                 $("#" + formulaArray[i]).css('font-size', '20px');
             }
         });
+    } else {
+        $container.find('input[data-id=' + id + ']').val(answer);
     }
-
-    $container.find('input[data-id=' + id + ']').val(answer);
 }
 
 function resetAnswers()
