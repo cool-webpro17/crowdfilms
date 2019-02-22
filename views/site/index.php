@@ -102,11 +102,21 @@
       </div>
       <div class="slide-nav w-slider-nav w-shadow w-round w-num"></div>
     </div>
+    
+ <br><br>
+    <h3 class="slideheading"><strong id="Watis" class="bold-text">Wat anderen zeggen over Crowdfilms:</strong></h3>
+    <div class="text-block-20" ><i>Onze samenwerking met Crowdfilms was eerst en vooral nieuw en daarom in het begin misschien nog wat onwenning. 
+    Het resultaat mocht er echter zijn: een opname van goede kwaliteit en een mooi aandenken voor muzikanten, zangers en publiek. 
+    De verschillende formules van Crowdfilms maken het mogelijk om binnen de beperkingen van het budget van elke vereniging te werken.</i></div>
+    <div class="text-block-20">Dhr. Geuens van de Karel De Grote Hogeschool.</div>
+<br><br>
+    
     <div class="text-block-20">Overtuigd?<br>Start met de onderstaande knop jouw vrijblijvende aanvraag voor een Crowdfilm<br>en krijg meteen een idee van de mogelijkheden! </div>
     <div class="columns-8 w-row">
       <div class="w-col w-col-6"><div class="w-embed"><a href="https://crowdfilms.be/aanvraag" target="_blank" class="centralbutton-fp w-button">Maak een simulatie</a></div></div>
       <div class="column-7 w-col w-col-6"><div class="w-embed"><a href="https://crowdfilms.be/aanvraag" target="_blank" class="centralbutton-fp w-button">Start jouw aanvraag</a></div></div>
     </div>
+    
     <div class="div-block">
       <div style="padding-top:56.27659574468085%" id="w-node-ad2024659495-e4ab8b9a" class="video w-video w-embed"><iframe class="embedly-embed" src="https://cdn.embedly.com/widgets/media.html?src=https%3A%2F%2Fplayer.vimeo.com%2Fvideo%2F263138580%3Fapp_id%3D122963&dntp=1&url=https%3A%2F%2Fvimeo.com%2F263138580&image=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2F692593271_1280.jpg&key=96f1f04c5f4143bcb0f2e68c87d65feb&type=text%2Fhtml&schema=vimeo" scrolling="no" frameborder="0" allow="autoplay; fullscreen" allowfullscreen="true"></iframe></div>
     </div>
