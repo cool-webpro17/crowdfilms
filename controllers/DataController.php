@@ -254,7 +254,7 @@ class DataController extends Controller
 
         Yii::$app->mailer->compose('email_confirm', ['vars' => $vars])
             ->setFrom('info@antwerpporttours.com')
-            ->setTo('aaron.rodier84@gmail.com')
+            ->setTo($answers['eMail'])
             ->setReplyTo('info@antwerpporttours.com')
             ->setSubject('Jouw online prijsberekening bij Crowdfilms.be')
             ->send();
