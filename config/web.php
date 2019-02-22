@@ -33,23 +33,23 @@ $config = [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-//        'mailer' => [
-//            'class' => 'nickcv\mandrill\Mailer',
-//            'apikey' => 'QAlM_nvZRLs4W8w3QYZWxg',
-//            'useMandrillTemplates' => true,
-//            'useTemplateDefaults' => false,
-//        ],
         'mailer' => [
-            'class' => 'yii\swiftmailer\Mailer',
-            'transport' => [
-                'class' => 'Swift_SmtpTransport',
-                'host' => 'send.one.com',
-                'username' => 'info@antwerpporttours.com',
-                'password' => 'HeyDevelopment',
-                'port' => '465',
-                'encryption' => 'ssl',
-            ],
+            'class' => 'nickcv\mandrill\Mailer',
+            'apikey' => 'QAlM_nvZRLs4W8w3QYZWxg',
+            'useMandrillTemplates' => true,
+            'useTemplateDefaults' => false,
         ],
+//        'mailer' => [
+//            'class' => 'yii\swiftmailer\Mailer',
+//            'transport' => [
+//                'class' => 'Swift_SmtpTransport',
+//                'host' => 'send.one.com',
+//                'username' => 'info@antwerpporttours.com',
+//                'password' => 'HeyDevelopment',
+//                'port' => '465',
+//                'encryption' => 'ssl',
+//            ],
+//        ],
         /*
 	'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,

@@ -252,20 +252,20 @@ class DataController extends Controller
             'discountTotal' => $answers['grandTotal'] - $answers['crowdRevenue'],
         ];
 
-        Yii::$app->mailer->compose('email_confirm', ['vars' => $vars])
-            ->setFrom('info@antwerpporttours.com')
-            ->setTo($answers['eMail'])
-            ->setReplyTo('info@antwerpporttours.com')
-            ->setSubject('Jouw online prijsberekening bij Crowdfilms.be')
-            ->send();
-
-//        $success = Yii::$app->mailer
-//            ->compose('email_confirm')
-//            ->setGlobalMergeVars($vars)
-//            ->setTo(array($answers['eMail'], 'team@crowdfilms.be'))
-//            ->setFrom('team@crowdfilms.be')
-//            ->setReplyTo('team@crowdfilms.be')
+//        Yii::$app->mailer->compose('email_confirm', ['vars' => $vars])
+//            ->setFrom('info@antwerpporttours.com')
+//            ->setTo($answers['eMail'])
+//            ->setReplyTo('info@antwerpporttours.com')
+//            ->setSubject('Jouw online prijsberekening bij Crowdfilms.be')
 //            ->send();
+
+        $success = Yii::$app->mailer
+            ->compose('email_confirm')
+            ->setGlobalMergeVars($vars)
+            ->setTo(array($answers['eMail'], 'team@crowdfilms.be'))
+            ->setFrom('team@crowdfilms.be')
+            ->setReplyTo('team@crowdfilms.be')
+            ->send();
 
     }
 
