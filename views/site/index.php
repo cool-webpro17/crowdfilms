@@ -108,7 +108,7 @@
     <div class="text-block-20" ><i>Onze samenwerking met Crowdfilms was eerst en vooral nieuw en daarom in het begin misschien nog wat onwenning. 
     Het resultaat mocht er echter zijn: een opname van goede kwaliteit en een mooi aandenken voor muzikanten, zangers en publiek. 
     De verschillende formules van Crowdfilms maken het mogelijk om binnen de beperkingen van het budget van elke vereniging te werken.</i></div>
-    <div class="text-block-20">Dhr. Geuens van de Karel De Grote Hogeschool.</div>
+    <div class="text-block-20">Dhr. Geuens van de Karel De Scheldezonen.</div>
 <br><br>
     
     <div class="text-block-20">Overtuigd?<br>Start met de onderstaande knop jouw vrijblijvende aanvraag voor een Crowdfilm<br>en krijg meteen een idee van de mogelijkheden! </div>
