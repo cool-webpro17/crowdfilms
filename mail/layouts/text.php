@@ -10,5 +10,6 @@ use yii\helpers\Html;
 <?php $this->beginPage() ?>
 <?php $this->beginBody() ?>
 <?= $content ?>
+<?php echo('Test_Text'); ?>
 <?php $this->endBody() ?>
 <?php $this->endPage() ?>

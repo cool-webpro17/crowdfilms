@@ -11,7 +11,6 @@ use app\models\UserAnswers;
 use app\models\EventType;
 use app\models\PricingFormula;
 use app\models\FixedValues;
-use app\models\CrowdfundingMovieRentalValue;
 
 class DataController extends Controller
 {
@@ -218,7 +217,8 @@ class DataController extends Controller
         return Yii::$app->api->_sendResponse(200, $data, true);
     }
 
-    public function actionFormula_prices() {
+    public function actionFormula_prices()
+    {
         $cookies = Yii::$app->request->cookies;
         $user_id = $cookies['user_id']->value;
 
@@ -242,7 +242,6 @@ class DataController extends Controller
             return Yii::$app->api->_sendResponse(200, ["error" => "!! No user_id cookie found!"], false);
         }
         $previousAnswers = UserAnswers::find()->where(['user_id' => $cookies['user_id']->value])->andWhere(['in', 'value_id', ['filmType', 'crowdRevenue', 'discountTotal', 'email', 'grandTotal']])->all();
-        // $previousAnswers = UserAnswers::find()->where(['user_id' => $cookies['user_id']->value])->andWhere(['in', 'value_id', ['filmType', 'crowdRevenue', 'discountTotal', 'email']])->all();
 
         $answers = Yii::$app->utils->mapArray($previousAnswers);
 
@@ -252,15 +251,21 @@ class DataController extends Controller
             'crowdFundRevenue' => $answers['crowdRevenue'],
             'discountTotal' => $answers['grandTotal'] - $answers['crowdRevenue'],
         ];
-        // VarDumper::dump($vars);
-        // exit;
-        $success = Yii::$app->mailer
-            ->compose('email_confirm')
-            ->setGlobalMergeVars($vars)
-            ->setTo(array($answers['eMail'], 'team@crowdfilms.be'))
-            ->setFrom('team@crowdfilms.be')
-            ->setReplyTo('team@crowdfilms.be')
+
+        Yii::$app->mailer->compose('email_confirm', ['vars' => $vars])
+            ->setFrom('info@antwerpporttours.com')
+            ->setTo('aaron.rodier84@gmail.com')
+            ->setReplyTo('info@antwerpporttours.com')
+            ->setSubject('Jouw online prijsberekening bij Crowdfilms.be')
             ->send();
+
+//        $success = Yii::$app->mailer
+//            ->compose('email_confirm')
+//            ->setGlobalMergeVars($vars)
+//            ->setTo(array($answers['eMail'], 'team@crowdfilms.be'))
+//            ->setFrom('team@crowdfilms.be')
+//            ->setReplyTo('team@crowdfilms.be')
+//            ->send();
 
     }
 

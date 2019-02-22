@@ -304,11 +304,10 @@ class AdminController extends Controller
         ];
 
         $success = Yii::$app->mailer
-            ->compose('resend_password')
-            ->setGlobalMergeVars($vars)
+            ->compose('resend_password', ['vars' => $vars])
             ->setTo($data['username'])
-            ->setFrom('team@crowdfilms.be')
-            ->setReplyTo('team@crowdfilms.be')
+            ->setFrom('info@antwerpporttours.com')
+            ->setReplyTo('info@antwerpporttours.com')
             ->send();
 
         return Yii::$app->api->_sendResponse(200, $success, true);
