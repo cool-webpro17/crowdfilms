@@ -8,7 +8,7 @@ use yii\web\Controller;
 use yii\web\Response;
 use yii\helpers\VarDumper;
 use app\models\UserAnswers;
-use app\models\EventType;
+use app\models\EventStatus;
 use app\models\PricingFormula;
 use app\models\FixedValues;
 
@@ -111,15 +111,15 @@ class DataController extends Controller
                 $model->created_at = date('Y-m-d H:i:s');
                 $model->user_id = $cookies['user_id']->value;
 
-                $eventType = EventType::find()->where(['user_id' => $cookies['user_id']->value])->one();
+                $eventType = EventStatus::find()->where(['user_id' => $cookies['user_id']->value])->one();
                 if ($eventType == null) {
                     if ($data['value_id'] == 'eMail' && UserAnswers::find()->where(['value' => $data['value']])->one() != null) {
-                        $eventType = EventType::find()->where(['user_id' => UserAnswers::find()->where(['value' => $data['value']])->one()->user_id])->one();
+                        $eventType = EventStatus::find()->where(['user_id' => UserAnswers::find()->where(['value' => $data['value']])->one()->user_id])->one();
                         $eventType->event_status = 'Updated';
                         $eventType->created_at = date('Y-m-d H:i:s');
                         $eventType->save();
                     } else {
-                        $eventType = new EventType();
+                        $eventType = new EventStatus();
                         $eventType->user_id = $cookies['user_id']->value;
                         $eventType->event_status = 'Incomplete';
                         $eventType->created_at = date('Y-m-d H:i:s');
@@ -127,7 +127,7 @@ class DataController extends Controller
                     }
                 } else {
                     if ($data['value_id'] == 'eMail' && UserAnswers::find()->where(['value' => $data['value']])->one() != null) {
-                        $eventType = EventType::find()->where(['user_id' => UserAnswers::find()->where(['value' => $data['value']])->one()->user_id])->one();
+                        $eventType = EventStatus::find()->where(['user_id' => UserAnswers::find()->where(['value' => $data['value']])->one()->user_id])->one();
                         $eventType->event_status = 'Updated';
                         $eventType->created_at = date('Y-m-d H:i:s');
                         $eventType->save();
@@ -196,9 +196,9 @@ class DataController extends Controller
 
         $userAnswers = UserAnswers::findUserPricingValues($user_id);
 
-//        $eventType = EventType::find()->where(['user_id' => $user_id])->one();
+//        $eventType = EventStatus::find()->where(['user_id' => $user_id])->one();
 //        if ($eventType == null) {
-//            $eventType = new EventType();
+//            $eventType = new EventStatus();
 //        }
 
         $totalPrice = PricingFormula::calculateTotalPrice($userAnswers);

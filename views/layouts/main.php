@@ -99,6 +99,7 @@ Asset::register($this);
                                     ["label" => "Pricing", "url" => ["admin/pricing"], "icon" => "usd"],
                                     ["label" => "Settings", "url" => "/admin/settings", "icon" => "gear"],
                                     ["label" => "Userlog", "url" => ["admin/userlog"], "icon" => "user"],
+                                    ["label" => "Formula", "url" => ["admin/formula"], "icon" => "calculator"],
                                     ["label" => "Logout", "url" => ["admin/logout"], "icon" => "sign-out"],
                                 ],
                             ]
@@ -133,7 +134,8 @@ Asset::register($this);
                                 </li>
                                 <li><a href="/admin/settings"> Settings</a>
                                 </li>
-                                <li><a href="/admin/Userlog"> Userlog</a>
+                                <li><a href="/admin/userlog"> Userlog</a>
+                                <li><a href="/admin/formula"> Formula</a>
                                 </li>
                                 <li><a href="/admin/logout"><i class="fa fa-sign-out pull-right"></i> Log Out</a>
                                 </li>

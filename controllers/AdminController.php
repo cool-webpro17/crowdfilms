@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use phpDocumentor\Reflection\DocBlock\Tags\Param;
 use Yii;
 use yii\web\Controller;
 use yii\web\Response;
@@ -10,9 +11,12 @@ use app\models\UserAnswers;
 use app\models\UploadForm;
 use app\models\AdminUser;
 use app\models\FixedValues;
-use app\models\EventType;
+use app\models\EventStatus;
 use app\models\ActivityLog;
 use app\models\StatusType;
+use app\models\EventType;
+use app\models\FilmType;
+use app\models\CustomerType;
 use yii\web\UploadedFile;
 use yii2tech\csvgrid\CsvGrid;
 use yii\data\ArrayDataProvider;
@@ -20,6 +24,7 @@ use yii\filters\AccessControl;
 
 use yii\helpers\VarDumper;
 use yii\helpers\ArrayHelper;
+use yii\helpers\FileHelper;
 
 class AdminController extends Controller
 {
@@ -49,7 +54,9 @@ class AdminController extends Controller
                             'user_log_details' => ['post'],
                             'save_event_type' => ['post'],
                             'save_status' => ['post'],
-                            'remove_status' => ['post']
+                            'remove_status' => ['post'],
+                            'save_type' => ['post'],
+                            'remove_type' => ['post']
                         ],
                         'allow' => false,
                     ]
@@ -158,12 +165,42 @@ class AdminController extends Controller
         }
     }
 
+    public function actionFormula()
+    {
+        $model = new UploadForm;
+        $eventTypes = EventType::find()->all();
+        $filmTypes = FilmType::find()->all();
+        $customerTypes = CustomerType::find()->all();
+        $files = scandir(Yii::$app->basePath."/formula/");
+        $formulas = [];
+        foreach($files as $file) {
+            if (is_file(Yii::$app->basePath."/formula/" . $file)) {
+                $formulas[] = $file;
+            }
+        }
+//        $formulas = FileHelper::findFiles(Yii::$app->basePath."/formula");
+        $vars = ['cookies' => Yii::$app->request->cookies,
+            'model' => $model,
+            'action' => Yii::$app->session->get('admin'),
+            'eventTypes' => $eventTypes,
+            'filmTypes' => $filmTypes,
+            'customerTypes' => $customerTypes,
+            'formulas' => $formulas,
+            'username' => Yii::$app->session->get('username')];
+
+        if (Yii::$app->session->get('admin') == null || Yii::$app->session->get('admin') == 'adminLocked') {
+            return $this->render('adminLocked', $vars);
+        } else {
+            return $this->render('formula', $vars);
+        }
+    }
+
     public function actionUserlog()
     {
         $model = new UploadForm;
         $userAnswers = UserAnswers::find()->all();
         $userAnswers = ArrayHelper::index($userAnswers, null, 'user_id');
-        $eventTypes = EventType::find()->orderBy(['created_at' => SORT_DESC])->all();
+        $eventTypes = EventStatus::find()->orderBy(['created_at' => SORT_DESC])->all();
 
 //        $eventTypes = ArrayHelper::index($eventTypes, null, 'user_id');
 
@@ -366,7 +403,7 @@ class AdminController extends Controller
         $userAnswers = UserAnswers::find()->all();
         $userAnswers = ArrayHelper::index($userAnswers, null, 'user_id');
 
-        $eventType = EventType::find()->where(['user_id' => $userId])->one();
+        $eventType = EventStatus::find()->where(['user_id' => $userId])->one();
 
 
         foreach ($userAnswers as $key => &$userAnswer) {
@@ -413,11 +450,60 @@ class AdminController extends Controller
 
     public function actionSave_event_type() {
         $data = Yii::$app->api->handleRequest();
-        $eventType = EventType::find()->where(['user_id' => $data['user_id']])->one();
+        $eventType = EventStatus::find()->where(['user_id' => $data['user_id']])->one();
         $eventType->event_status = $data['eventType'];
         $eventType->save();
 
         return $this->redirect(['admin/userlogdetails', 'key' => $data['user_id']]);
+    }
+
+    public function actionSave_type() {
+        $data = Yii::$app->api->handleRequest();
+
+        if ($data['type'] == 'film') {
+            $type = FilmType::find()->where(['value' => $data['value']])->one();
+            if ($type == null) {
+                $type = new FilmType();
+            }
+            $type->value = $data['value'];
+            $type->text = $data['text'];
+            $type->save();
+        } else if ($data['type'] == 'event') {
+            $type = EventType::find()->where(['value' => $data['value']])->one();
+            if ($type == null) {
+                $type = new EventType();
+            }
+            $type->value = $data['value'];
+            $type->text = $data['text'];
+            $type->save();
+        } else if ($data['type'] == 'customer') {
+            $type = CustomerType::find()->where(['value' => $data['value']])->one();
+            if ($type == null) {
+                $type = new CustomerType();
+            }
+            $type->value = $data['value'];
+            $type->text = $data['text'];
+            $type->save();
+        }
+        return $this->redirect(['admin/formula']);
+
+    }
+
+    public function actionRemove_type() {
+        $data = Yii::$app->api->handleRequest();
+
+        if ($data['type'] == 'film') {
+            $type = FilmType::find()->where(['value' => $data['value']])->one();
+            $type->delete();
+        } else if ($data['type'] == 'event') {
+            $type = EventType::find()->where(['value' => $data['value']])->one();
+            $type->delete();
+        } else if ($data['type'] == 'customer') {
+            $type = CustomerType::find()->where(['value' => $data['value']])->one();
+            $type->delete();
+        }
+
+        return $this->redirect(['admin/formula']);
     }
 
     public function actionSave_status() {

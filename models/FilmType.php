@@ -12,14 +12,14 @@ use Yii;
  *
  * @property UserSession[] $userSessions
  */
-class EventStatus extends \yii\db\ActiveRecord
+class FilmType extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'event_status';
+        return 'film_type';
     }
 
     /**
@@ -28,15 +28,14 @@ class EventStatus extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'event_status', 'created_at'], 'required'],
-            [['user_id'], 'integer'],
-            [['event_status'], 'string'],
+            [['value'], 'required'],
+            [['value', 'text'], 'string'],
         ];
     }
 
     public static function primaryKey()
     {
-        return ['user_id'];
+        return ['value'];
     }
 
     /**
@@ -45,15 +44,14 @@ class EventStatus extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'user_id' => 'User ID',
-            'event_status' => 'Event Status',
-            'created_at' => 'Timestamp'
+            'value' => 'Value',
+            'text' => 'Text'
         ];
     }
 
     public function scopes() {
         return array(
-            'created_at' => array('order' => 'status DESC'),
+            'value' => array('order' => 'status DESC'),
         );
     }
 }
