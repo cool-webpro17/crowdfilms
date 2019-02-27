@@ -536,9 +536,19 @@ class AdminController extends Controller
 
         $arrayFormulaRules = [];
         if ($formulaRule == null) {
-            $allFormulaFiles = FileHelper::findFiles(Yii::$app->basePath."/formula");;
+            //$allFormulaFiles = FileHelper::findFiles(Yii::$app->basePath."/formula");
+			//$allFormulaFiles = scandir(Yii::$app->basePath."/formula/");;
+			$files = scandir(Yii::$app->basePath."/formula/");
+			$allFormulaFiles = [];
+			foreach($files as $file) {
+				if (is_file(Yii::$app->basePath."/formula/" . $file)) {
+					$allFormulaFiles[] = $file;
+				}
+			}
+			//VarDumper::dump($allFormulaFiles);
+			//exit;
             foreach ($allFormulaFiles as $eachFormulaFile) {
-                $arrayFormulaRules[] = file_get_contents($eachFormulaFile);
+                $arrayFormulaRules[] = file_get_contents(Yii::$app->basePath . "/formula/" . $eachFormulaFile);
             }
         } else {
             foreach ($formulaRule as $key => $eachRule) {
