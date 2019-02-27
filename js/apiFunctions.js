@@ -27,7 +27,21 @@ function saveValue(value_id, value)
         value: value
     };
 
-    request('data/save', [data]);
+    request('data/save', [data], function() {
+        if (value_id == 'customerType') {
+            request('/admin/film_formula', [], function(data) {
+                var htmlResult = '';
+                for (var i = 0; i < data.data.length; i++) {
+                    htmlResult += data.data[i];
+                }
+                $(".formulles").html(htmlResult);
+                var colWidth = 12 / data.data.length;
+                var columns = $(".formulles").find(".w-col");
+                columns.className = '';
+                columns.addClass('w-col').addClass('column-' + colWidth).addClass('w-col-' + colWidth);
+            });
+        }
+    });
 
     updateAnswerSelection(value_id, value);
 }
@@ -177,7 +191,8 @@ $(document).ready(function(){
         }
     });
 
-    $(".answer-button, .next-button").click(function(){
+    $(".firstformcontainer").on("click", ".answer-button, .next-button", function() {
+    // $(".answer-button, .next-button").click(function(){
 
         var $button = $(this);
         var next = $button.data("next");

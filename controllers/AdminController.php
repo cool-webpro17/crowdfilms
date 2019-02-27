@@ -17,6 +17,7 @@ use app\models\StatusType;
 use app\models\EventType;
 use app\models\FilmType;
 use app\models\CustomerType;
+use app\models\FormulaRule;
 use yii\web\UploadedFile;
 use yii2tech\csvgrid\CsvGrid;
 use yii\data\ArrayDataProvider;
@@ -56,7 +57,10 @@ class AdminController extends Controller
                             'save_status' => ['post'],
                             'remove_status' => ['post'],
                             'save_type' => ['post'],
-                            'remove_type' => ['post']
+                            'remove_type' => ['post'],
+                            'save_formula_rule' => ['post'],
+                            'remove_formula_rule' => ['post'],
+                            'film_formula' => ['post']
                         ],
                         'allow' => false,
                     ]
@@ -192,6 +196,37 @@ class AdminController extends Controller
             return $this->render('adminLocked', $vars);
         } else {
             return $this->render('formula', $vars);
+        }
+    }
+
+    public function actionFormula_rule() {
+        $model = new UploadForm;
+        $eventTypes = EventType::find()->all();
+        $filmTypes = FilmType::find()->all();
+        $customerTypes = CustomerType::find()->all();
+        $formulaRules = FormulaRule::find()->all();
+        $files = scandir(Yii::$app->basePath."/formula/");
+        $formulas = [];
+        foreach($files as $file) {
+            if (is_file(Yii::$app->basePath."/formula/" . $file)) {
+                $formulas[] = $file;
+            }
+        }
+        $vars = ['cookies' => Yii::$app->request->cookies,
+            'model' => $model,
+            'action' => Yii::$app->session->get('admin'),
+            'eventTypes' => $eventTypes,
+            'filmTypes' => $filmTypes,
+            'customerTypes' => $customerTypes,
+            'formulas' => $formulas,
+            'username' => Yii::$app->session->get('username'),
+            'formulaRules' => $formulaRules
+        ];
+
+        if (Yii::$app->session->get('admin') == null || Yii::$app->session->get('admin') == 'adminLocked') {
+            return $this->render('adminLocked', $vars);
+        } else {
+            return $this->render('formulaRule', $vars);
         }
     }
 
@@ -455,6 +490,66 @@ class AdminController extends Controller
         $eventType->save();
 
         return $this->redirect(['admin/userlogdetails', 'key' => $data['user_id']]);
+    }
+
+    public function actionSave_formula_rule() {
+        $data = Yii::$app->api->handleRequest();
+        $formulaRule = FormulaRule::find()->where(['eventType' => $data['eventType'], 'filmType' => $data['filmType'], 'customerType' => $data['customerType']])->one();
+        if ($formulaRule != null) {
+            $formulaRule->F1ID = $data['F1ID'];
+            $formulaRule->F2ID = $data['F2ID'];
+            $formulaRule->F3ID = $data['F3ID'];
+            $formulaRule->F4ID = $data['F4ID'];
+            $formulaRule->save();
+        } else {
+            $formulaRule = new FormulaRule();
+            $formulaRule->eventType = $data['eventType'];
+            $formulaRule->filmType = $data['filmType'];
+            $formulaRule->customerType = $data['customerType'];
+            $formulaRule->F1ID = $data['F1ID'];
+            $formulaRule->F2ID = $data['F2ID'];
+            $formulaRule->F3ID = $data['F3ID'];
+            $formulaRule->F4ID = $data['F4ID'];
+            $formulaRule->save();
+        }
+        return $this->redirect(['admin/formula_rule']);
+
+    }
+
+    public function actionRemove_formula_rule() {
+        $data = Yii::$app->api->handleRequest();
+        $formulaRule = FormulaRule::find()->where(['eventType' => $data['eventType'], 'filmType' => $data['filmType'], 'customerType' => $data['customerType']])->one();
+        $formulaRule->delete();
+        return $this->redirect(['admin/formula_rule']);
+    }
+
+    public function actionFilm_formula() {
+        $data = Yii::$app->api->handleRequest();
+        $cookies = Yii::$app->request->cookies;
+        $user_id = $cookies['user_id']->value;
+
+        $eventType = UserAnswers::find()->where(['user_id' => $user_id, 'value_id' => 'eventType'])->orderBy(['created_at' => SORT_DESC])->one()->value;
+        $filmType = UserAnswers::find()->where(['user_id' => $user_id, 'value_id' => 'filmType'])->orderBy(['created_at' => SORT_DESC])->one()->value;
+        $customerType = UserAnswers::find()->where(['user_id' => $user_id, 'value_id' => 'customerType'])->orderBy(['created_at' => SORT_DESC])->one()->value;
+
+        $formulaRule = FormulaRule::find()->where(['eventType' => $eventType, 'filmType' => $filmType, 'customerType' => $customerType])->one();
+
+        $arrayFormulaRules = [];
+        if ($formulaRule == null) {
+            $allFormulaFiles = FileHelper::findFiles(Yii::$app->basePath."/formula");;
+            foreach ($allFormulaFiles as $eachFormulaFile) {
+                $arrayFormulaRules[] = file_get_contents($eachFormulaFile);
+            }
+        } else {
+            foreach ($formulaRule as $key => $eachRule) {
+                if ($key != 'eventType' && $key != 'filmType' && $key != 'customerType' && $eachRule != null) {
+                    $arrayFormulaRules[] = file_get_contents(Yii::$app->basePath . "/formula/" . $eachRule);
+
+                }
+            }
+        }
+
+        return Yii::$app->api->_sendResponse(200, ['data' => $arrayFormulaRules], true);
     }
 
     public function actionSave_type() {
