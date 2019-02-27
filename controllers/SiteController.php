@@ -145,4 +145,9 @@ class SiteController extends Controller
     {
         return $this->render('algemenevoorwaarden');
     }
+    
+    public function actionEdithhinostroza()
+    {
+        return $this->render('edithhinostroza');
+    }
 }
