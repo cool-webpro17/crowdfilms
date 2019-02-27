@@ -31,7 +31,7 @@ class UserAnswers extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'value', 'value_id'], 'required'],
+            [['user_id', 'value', 'value_id', 'created_at'], 'required'],
             [['user_answer_id', 'user_id'], 'integer'],
             [['value', 'value_id'], 'string'],
             [['user_answer_id'], 'unique'],
@@ -111,5 +111,11 @@ class UserAnswers extends \yii\db\ActiveRecord
         }
 
         return $errors;
+    }
+
+    public function scopes() {
+        return array(
+            'created_at' => array('order' => 'status DESC'),
+        );
     }
 }

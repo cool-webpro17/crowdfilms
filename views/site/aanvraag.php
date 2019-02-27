@@ -121,6 +121,28 @@
         .margin-top-20 {
             margin-top: 20px !important;
         }
+
+        .formulekader img {
+            max-width: 200px;
+        }
+
+        .column-4 {
+            right: 0px;
+            display: block;
+            padding-right: 0px;
+            padding-left: 0px;
+            border: 1px none #c33;
+            background-color: transparent;
+        }
+
+        .column-6 {
+            right: 0px;
+            display: block;
+            padding-right: 0px;
+            padding-left: 0px;
+            border: 1px none #c33;
+            background-color: transparent;
+        }
     </style>
     <!--  Facebook Pixel Code  -->
     <script>
@@ -410,55 +432,58 @@
             <div class="questiondetail">Wordt dit een kleinschalig project of zie je het écht groots? Wij bieden voor
                 ieder wat wils, samengevat in onderstaande formules:
             </div>
+            <div class="formula w-row">
+
+            </div>
             <div class="formulles w-row">
-                <div class="column-3 w-col w-col-3">
-                    <div class="formulekader">
-                        <h4 class="heading-11">1</h4>
-                        <h4 class="heading-6">Gewoon is al <br>speciaal genoeg</h4>
-                        <p class="paragraph-2">1 videograaf,<br>een opkomend en <br>gepassioneerd talent.<br></p><img
-                                src="images/Crowdfilms1.png" alt="" class="image">
-                        <br><br>
-                        <div class="questiondetail" id="formulaOne">Vanaf <b>349,9</b>€</div>
-                        <div class="w-embed"><a href="#" class="button w-button answer-button" data-id="filmFormula"
-                                                data-answer="F1" data-next="eMail">Selecteren</a></div>
-                    </div>
-                </div>
-                <div class="column-3 w-col w-col-3">
-                    <div class="formulekader">
-                        <h4 class="heading-11">2</h4>
-                        <h4 class="heading-6">Het mag net <br>iets meer zijn</h4>
-                        <p class="paragraph-2">1 cameraman,<br>een professionele vakman.<br><br></p><img
-                                src="images/Crowdfilms2.png" alt="" class="image">
-                        <br><br>
-                        <div class="questiondetail" id="formulaTwo">Vanaf <b>1321,3</b>€</div>
-                        <div class="w-embed"><a href="#" class="button w-button answer-button" data-id="filmFormula"
-                                                data-answer="F2" data-next="eMail">Selecteren</a></div>
-                    </div>
-                </div>
-                <div class="column-3 w-col w-col-3">
-                    <div class="formulekader">
-                        <h4 class="heading-11">3</h4>
-                        <h4 class="heading-6">Er is veel te zien, <br>en veel te filmen</h4>
-                        <p class="paragraph-2">2 tot 3 koppige crew,<br> opkomende talenten.<br><br></p><img
-                                src="images/Crowdfilms3.png" alt="" class="image">
-                        <br><br>
-                        <div class="questiondetail" id="formulaThree">Vanaf <b>1615,5</b>€</div>
-                        <div class="w-embed"><a href="#" class="button w-button answer-button" data-id="filmFormula"
-                                                data-answer="F3" data-next="eMail">Selecteren</a></div>
-                    </div>
-                </div>
-                <div class="column-3 w-col w-col-3">
-                    <div class="formulekader">
-                        <h4 class="heading-11">4</h4>
-                        <h4 class="heading-6">Wij zien het groots <br>en hebben plannen</h4>
-                        <p class="paragraph-2">3 tot 4 koppige crew, <br>Tv-kwaliteit, <br>regisseur aanwezig.</p><img
-                                src="images/Crowdfilms4.png" alt="" class="image">
-                        <br><br>
-                        <div class="questiondetail" id="formulaFour">Vanaf <b>4214,4</b>€</div>
-                        <div class="w-embed"><a href="#" class="button w-button answer-button" data-id="filmFormula"
-                                                data-answer="F4" data-next="eMail">Selecteren</a></div>
-                    </div>
-                </div>
+<!--                <div class="column-3 w-col w-col-3">-->
+<!--                    <div class="formulekader">-->
+<!--                        <h4 class="heading-11">1</h4>-->
+<!--                        <h4 class="heading-6">Gewoon is al <br>speciaal genoeg</h4>-->
+<!--                        <p class="paragraph-2">1 videograaf,<br>een opkomend en <br>gepassioneerd talent.<br></p><img-->
+<!--                                src="images/Crowdfilms1.png" alt="" class="image">-->
+<!--                        <br><br>-->
+<!--                        <div class="questiondetail" id="formulaOne">Vanaf <b>349,9</b>€</div>-->
+<!--                        <div class="w-embed"><a href="#" class="button w-button answer-button" data-id="filmFormula"-->
+<!--                                                data-answer="F1" data-next="eMail">Selecteren</a></div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="column-3 w-col w-col-3">-->
+<!--                    <div class="formulekader">-->
+<!--                        <h4 class="heading-11">2</h4>-->
+<!--                        <h4 class="heading-6">Het mag net <br>iets meer zijn</h4>-->
+<!--                        <p class="paragraph-2">1 cameraman,<br>een professionele vakman.<br><br></p><img-->
+<!--                                src="images/Crowdfilms2.png" alt="" class="image">-->
+<!--                        <br><br>-->
+<!--                        <div class="questiondetail" id="formulaTwo">Vanaf <b>1321,3</b>€</div>-->
+<!--                        <div class="w-embed"><a href="#" class="button w-button answer-button" data-id="filmFormula"-->
+<!--                                                data-answer="F2" data-next="eMail">Selecteren</a></div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="column-3 w-col w-col-3">-->
+<!--                    <div class="formulekader">-->
+<!--                        <h4 class="heading-11">3</h4>-->
+<!--                        <h4 class="heading-6">Er is veel te zien, <br>en veel te filmen</h4>-->
+<!--                        <p class="paragraph-2">2 tot 3 koppige crew,<br> opkomende talenten.<br><br></p><img-->
+<!--                                src="images/Crowdfilms3.png" alt="" class="image">-->
+<!--                        <br><br>-->
+<!--                        <div class="questiondetail" id="formulaThree">Vanaf <b>1615,5</b>€</div>-->
+<!--                        <div class="w-embed"><a href="#" class="button w-button answer-button" data-id="filmFormula"-->
+<!--                                                data-answer="F3" data-next="eMail">Selecteren</a></div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="column-3 w-col w-col-3">-->
+<!--                    <div class="formulekader">-->
+<!--                        <h4 class="heading-11">4</h4>-->
+<!--                        <h4 class="heading-6">Wij zien het groots <br>en hebben plannen</h4>-->
+<!--                        <p class="paragraph-2">3 tot 4 koppige crew, <br>Tv-kwaliteit, <br>regisseur aanwezig.</p><img-->
+<!--                                src="images/Crowdfilms4.png" alt="" class="image">-->
+<!--                        <br><br>-->
+<!--                        <div class="questiondetail" id="formulaFour">Vanaf <b>4214,4</b>€</div>-->
+<!--                        <div class="w-embed"><a href="#" class="button w-button answer-button" data-id="filmFormula"-->
+<!--                                                data-answer="F4" data-next="eMail">Selecteren</a></div>-->
+<!--                    </div>-->
+<!--                </div>-->
             </div>
         </div>
         <div id="eMail" class="formcontainerprijs question-container hide-section">

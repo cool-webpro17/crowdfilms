@@ -7776,3 +7776,12 @@ table thead .checkbox.radio { margin-top:-7px;margin-top:-21px; }
 .btn-save-event {
   margin-top: 10px;
 }
+
+.col-form-label {
+  padding-top: calc(.375rem + 1px);
+  padding-bottom: calc(.375rem + 1px);
+  margin-bottom: 0;
+  font-size: inherit;
+  line-height: 1.5;
+}
+
