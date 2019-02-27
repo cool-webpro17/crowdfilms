@@ -549,8 +549,7 @@
 <!--                </center>-->
 <!--            </div>-->
                  <div class="question">Klinkt goed? Deze prijsberekening bewaren?</div>
-            <div class="questiondetail">Aan de hand van onderstaande vragen bekijken wij geheel vrijblijvend voor jouw
-                de beschikbaarheid van een geschikte filmcrew. 
+            <div class="questiondetail">Aan de hand van onderstaande vragen matchen wij je met de perfecte filmcrew voor jouw wensen:
             </div>
             <div class="columns-7 w-row">
                 <div class="w-col w-col-6">
