@@ -2,11 +2,14 @@
 
 namespace app\controllers;
 
+use Symfony\Component\EventDispatcher\Event;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\Response;
 use yii\helpers\VarDumper;
+use yii\helpers\ArrayHelper;
+
 use app\models\UserAnswers;
 use app\models\EventStatus;
 use app\models\PricingFormula;
@@ -83,26 +86,26 @@ class DataController extends Controller
 //        curl_close($curl);
 //        echo $resp;
         /////////////////////////////////////
-//        $code = rawurldecode("FBZf9eU8QqxlaYGK63R0%2Bz0TUf5Rf8ZA4Xf7%2BypgYRgfCfNImr49sy1lwCBmKkV3JX8%2FhZcfvLjnDYl4hFN6KA%2FZ7IljIhDBIx1BYCcJSrpJCMLH235zHFPjvn3WczbchCla0BMQpFykTiX82d%2BKVLbXqDzkMdgefQdyImMdsjRHH8OgVA5dTQl3kH9R5f0JZBPxNLi8ahU632MpwXnM7HU1wCfgPkZX0h0Dit9RHXm92JLf98fibFgX3mFrSTJMApXCxuEOmiQTL8WLMT8UOoZy8YUZ6ZQFpMmyuK4vkWeS7Cv1sLlG1Mxbl%2BwUhAgCvvE2VXWkrnXdRH1XwYmBIzNnBXqZFmM92OHYLKZXwOSBDVANwhNZfEhn9Z5uD3uV8TXO9tdywRhIEBvWdrN762E4EeUop%2FMZt6j2c8IM3m4E%2BQcxbtKpcMSx873JV0mtllygYUjDcNF0kuLeIEdLQMR5mcDSLCbq1EXsBNypDRInMyWeBXKURiVNFf28sDsWQaSWea1Eks1kO4XjtRUbgUoXnBae3ZDEgMuayVNGTfGIwJroZSKH7L9w0cb7uo%2FTG%2BhkqVT7HHLnFjOAlnpf4dcAYwBvIB4ltO54Acw6DmyvMc4ByN2ccjB%2FfgLZQAyqZjpnEqsTE8Q7wQs3vut7rbTB126nT4NwUkzTKpfQtvU%3D");
-//        /**
-//         * Request an access token based on the received authorization code.
-//         */
-//        $ch = curl_init();
-//        curl_setopt($ch, CURLOPT_URL, 'https://app.teamleader.eu/oauth2/access_token');
-//        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-//        curl_setopt($ch, CURLOPT_POST, true);
-//        curl_setopt($ch, CURLOPT_POSTFIELDS, [
-//            'code' => $code,
-//            'client_id' => $clientId,
-//            'client_secret' => $clientSecret,
-//            'redirect_uri' => $redirectUri,
-//            'grant_type' => 'authorization_code',
-//        ]);
-//        $response = curl_exec($ch);
-//        $data = json_decode($response, true);
-//        $accessToken = $data['access_token'];
-//        echo $response;
-//        exit;
+        $code = rawurldecode("R%2Bl78XmO89J7%2FrBPSuGhLKakwCSrFtnqi%2FRznQjlpuvmH8TcRt1UUFi%2FjC3oDNkFWGDNT61kWi8TuHPrW%2FA4P15RFguLDJlbm1dO9lYFQeOzEnZnNbFTQIPTrkziHsrhbarHjZ9gSM3zPpdIribod%2Br7ELBRdz3fXHDCrd2iSjg%2Fu%2Bwapp7Q1vb2t2oEWRyyUNJNRQNu529hcY4z8x2BJrBvpgPPakI%2F3CMHzSpdA0gc2S2MjIovGPon%2BFM4sBU%2BTBlVsx%2FuUQMyiR46eSXRX9Ewb9%2F%2Bcnya%2B930Z%2B2PEwXAUxZrpYIilchbnEThOhS5enwic3ue%2BcvJ0RbEmmiOeRlw0IoBv7qGM4tb1ru%2BiypZsnvP1n5F1B40WuoAphBvTVKwuA%2F0djQyXXLgOatpfaCzFbzFwXiarIWoVeTHtEvy22gp0ZgfEeUh%2BHndF45V95MDn1FNPK1fmM6lVX0u7ZU1cxl80335MVSMJD4ARNfgH%2BwF4mN9n9UIRXny%2FIppW9Kdzeu4Wpe5rb0bHHJC6oi8aLiJXEUx3Vz7kMNM1kAC8gZ6AWOpZmCjwhG%2BLOCOMUYYDS8y9uFTZYLhdmidT3tjrYZVi8Yqkg1cAOyQVKdlcLdOy0esuptdmDN1zG%2F18CIzi73WKgcodoiR2cpu2Un3%2FTPLw8QLHDZAONk5RMA6najHSISIWubzLxgp4m9wvwA9dXAIWCmVghOOr46zOxjk9bEqcN834K1vVFiGjsD19F%2FN5L9eHLFzTuPUS%2FIyB0YWM2XYl31aY2UhY%2B0SECgAB%2Fw%2BD63xvzf9W1HhPW0O%2F2HH3yHsONO5GTAPYc1eLAzmz1M%2FOUWFIMFXO3yXcw%3D%3D");
+        /**
+         * Request an access token based on the received authorization code.
+         */
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, 'https://app.teamleader.eu/oauth2/access_token');
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, [
+            'code' => $code,
+            'client_id' => $clientId,
+            'client_secret' => $clientSecret,
+            'redirect_uri' => $redirectUri,
+            'grant_type' => 'authorization_code',
+        ]);
+        $response = curl_exec($ch);
+        $data = json_decode($response, true);
+        $accessToken = $data['access_token'];
+        echo $response;
+        exit;
         /**
          * Get the user identity information using the access token.
          */
@@ -155,7 +158,12 @@ class DataController extends Controller
                         $eventType = EventStatus::find()->where(['user_id' => UserAnswers::find()->where(['value' => $data['value']])->one()->user_id])->one();
                         $eventType->event_status = 'Updated';
                         $eventType->created_at = date('Y-m-d H:i:s');
-                        $eventType->save();
+                        if ($eventType->save()) {
+                            $content = [
+                                'user_id' => $eventType->user_id
+                            ];
+                            $this->updateContact($content);
+                        }
                     } else {
                         $eventType = new EventStatus();
                         $eventType->user_id = $cookies['user_id']->value;
@@ -168,20 +176,32 @@ class DataController extends Controller
                         $eventType = EventStatus::find()->where(['user_id' => UserAnswers::find()->where(['value' => $data['value']])->one()->user_id])->one();
                         $eventType->event_status = 'Updated';
                         $eventType->created_at = date('Y-m-d H:i:s');
-                        $eventType->save();
+                        if ($eventType->save()) {
+                            $content = [
+                                'user_id' => $eventType->user_id
+                            ];
+                            $this->updateContact($content);
+                        }
                     } else {
                         if ($data['value_id'] == 'eMail') {
                             $eventType->event_status = 'New';
                             $eventType->created_at = date('Y-m-d H:i:s');
-                            $eventType->save();
-                            $content = [
-                                'email' => $data['value']
-                            ];
-//                            $this->createNewContact($content);
+                            if ($eventType->save()) {
+                                $content = [
+                                    'email' => $data['value'],
+                                    'user_id' => $eventType->user_id
+                                ];
+                                $this->createNewContact($content);
+                            }
                         } else if ($eventType->event_status != 'Incomplete' && $data['value_id'] != 'eMail') {
                             $eventType->event_status = 'Updated';
                             $eventType->created_at = date('Y-m-d H:i:s');
-                            $eventType->save();
+                            if ($eventType->save()) {
+                                $content = [
+                                    'user_id' => $eventType->user_id
+                                ];
+                                $this->updateContact($content);
+                            }
                         }
                     }
                 }
@@ -201,35 +221,52 @@ class DataController extends Controller
 
     public function createNewContact($content)
     {
-        $clientId = '960432c85b09d5c20ede10bd8e765e8a';
-        $clientSecret = 'faf5db970b0cf6a67f79f44e42edfc39';
-
         $accessToken = Token::find()->one()->access_token;
-        $refreshToken = Token::find()->one()->refresh_token;
 
-        $refreshCh = curl_init();
-        curl_setopt($refreshCh, CURLOPT_URL, 'https://app.teamleader.eu/oauth2/access_token');
-        curl_setopt($refreshCh, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($refreshCh, CURLOPT_POST, true);
-        curl_setopt($refreshCh, CURLOPT_POSTFIELDS, [
-            "client_id" => $clientId,
-            "client_secret" => $clientSecret,
-            "refresh_token" => $refreshToken,
-            "grant_type" => "refresh_token",
-        ]);
-        $refreshResponse = curl_exec($refreshCh);
-        $refreshData = json_decode($refreshResponse, true);
-        VarDumper::dump($refreshData);
-        exit;
+        $userAnswers = UserAnswers::find()->all();
+        $userAnswers = ArrayHelper::index($userAnswers, null, 'user_id');
+
+        foreach ($userAnswers as $key => &$userAnswer) {
+            forEach ($userAnswer as $row) {
+
+                if ($row->value_id == 'eMail') {
+                    forEach ($userAnswers as $compareKey => $compareAnswer) {
+                        forEach ($compareAnswer as $compareRow) {
+
+                            if ($compareRow->value_id == 'eMail') {
+
+                                if ($compareRow->value == $row->value && $compareKey != $key) {
+                                    $userAnswers[$key] = array_merge($userAnswers[$key], $userAnswers[$compareKey]);
+                                    unset($userAnswers[$compareKey]);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        foreach ($userAnswers as $key => &$userAnswer) {
+            foreach ($userAnswer as $rowKey => $row) {
+                $userAnswers[$key][$rowKey] = $this->object_to_array($userAnswers[$key][$rowKey]);
+            }
+        }
+
+        $valueDetails = $userAnswers[$content['user_id']];
+
+        $requestData = null;
+
+        foreach ($valueDetails as $eachValue) {
+            $requestData = $requestData . $eachValue['value_id'] . ': ' . $eachValue['value'] . '<br/> ';
+        }
 
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, 'https://api.teamleader.eu/contacts.info');
+        curl_setopt($ch, CURLOPT_URL, 'https://api.teamleader.eu/contacts.add');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: Bearer ' . $accessToken, "Content-Type: application/json;charset=utf-8"]);
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
-            'id' => 'b01e8682-72a7-0e10-bf73-dc3181d42de4',
-            'last_name' => "API TEST",
+            'last_name' => $content['email'],
             'emails' => [
                 [
                     'type' => "primary",
@@ -239,52 +276,95 @@ class DataController extends Controller
             'custom_fields' => [
                 [
                     'id' => 'c5f0285d-9aa2-0ada-a354-311c70640cee',
-                    'value' => 'Text for testing ....'
+                    'value' => $requestData
+
                 ]
             ]
         ]));
-//        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
-//            'filter' => [
-//                'email' => [
-//                    'type' => 'primary',
-//                    'email' => 'aaron.rodier84@gmail.com'
-//                ]
-//            ]
-//        ]));
+
         $response = curl_exec($ch);
         $data = json_decode($response, true);
-        VarDumper::dump($data);
-        exit;
 
-
-        if (array_key_exists('errors', $data)) {
-            VarDumper::dump($data);
-            exit;
-            $refreshCh = curl_init();
-            curl_setopt($refreshCh, CURLOPT_URL, 'https://app.teamleader.eu/oauth2/access_token');
-            curl_setopt($refreshCh, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($refreshCh, CURLOPT_POST, true);
-            curl_setopt($refreshCh, CURLOPT_POSTFIELDS, [
-                "client_id" => $clientId,
-                "client_secret" => $clientSecret,
-                "refresh_token" => $refreshToken,
-                "grant_type" => "refresh_token",
-            ]);
-            $refreshResponse = curl_exec($refreshCh);
-            $refreshData = json_decode($refreshResponse, true);
-            VarDumper::dump($refreshData);
-            exit;
-
-        } else {
-
-        }
+        $eventStatus = EventStatus::find()->where(['user_id' => $content['user_id']])->one();
+        $eventStatus->contact_id = $data['data']['id'];
+        $eventStatus->save();
     }
 
-    public function actionRefreshToken() {
-        $token = new Token;
-        $token->access_token = 'test_access_token';
-        $token->refresh_token = 'test_refresh_token';
-        $token->save();
+    public function updateContact($content) {
+        $accessToken = Token::find()->one()->access_token;
+
+        $userAnswers = UserAnswers::find()->all();
+        $userAnswers = ArrayHelper::index($userAnswers, null, 'user_id');
+
+        $eventStatus = EventStatus::find()->where(['user_id' => $content['user_id']])->one();
+
+        foreach ($userAnswers as $key => &$userAnswer) {
+            forEach ($userAnswer as $row) {
+
+                if ($row->value_id == 'eMail') {
+                    forEach ($userAnswers as $compareKey => $compareAnswer) {
+                        forEach ($compareAnswer as $compareRow) {
+
+                            if ($compareRow->value_id == 'eMail') {
+
+                                if ($compareRow->value == $row->value && $compareKey != $key) {
+                                    $userAnswers[$key] = array_merge($userAnswers[$key], $userAnswers[$compareKey]);
+                                    unset($userAnswers[$compareKey]);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        foreach ($userAnswers as $key => &$userAnswer) {
+            foreach ($userAnswer as $rowKey => $row) {
+                $userAnswers[$key][$rowKey] = $this->object_to_array($userAnswers[$key][$rowKey]);
+            }
+        }
+
+        $valueDetails = $userAnswers[$content['user_id']];
+
+        $requestData = null;
+
+        foreach ($valueDetails as $eachValue) {
+            $requestData = $requestData . $eachValue['value_id'] . ': ' . $eachValue['value'] . '<br/> ';
+        }
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, 'https://api.teamleader.eu/contacts.update');
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: Bearer ' . $accessToken, "Content-Type: application/json;charset=utf-8"]);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
+            'id' => $eventStatus->contact_id,
+            'custom_fields' => [
+                [
+                    'id' => 'c5f0285d-9aa2-0ada-a354-311c70640cee',
+                    'value' => $requestData
+
+                ]
+            ]
+        ]));
+        $response = curl_exec($ch);
+        $data = json_decode($response, true);
+
+    }
+
+    public function object_to_array($data)
+    {
+        if (is_array($data) || is_object($data)) {
+            $result = array();
+
+            foreach ($data as $key => $value) {
+                $result[$key] = $this->object_to_array($value);
+            }
+
+            return $result;
+        }
+
+        return $data;
     }
 
     public function actionCalculate_crowdrental_pricing()
@@ -336,15 +416,19 @@ class DataController extends Controller
 
         $data = [
             'grandTotal' => $totalPrice,
+        ];
+
+        $errors = UserAnswers::insertRows($user_id, $data);
+
+        $returnData = [
+            'grandTotal' => $totalPrice,
             'formulaOne' => $formulaPrices[0],
             'formulaTwo' => $formulaPrices[1],
             'formulaThree' => $formulaPrices[2],
             'formulaFour' => $formulaPrices[3],
         ];
 
-        $errors = UserAnswers::insertRows($user_id, $data);
-
-        return Yii::$app->api->_sendResponse(200, $data, true);
+        return Yii::$app->api->_sendResponse(200, $returnData, true);
     }
 
     public function actionFormula_prices()

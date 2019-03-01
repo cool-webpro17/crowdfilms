@@ -30,7 +30,7 @@ class EventStatus extends \yii\db\ActiveRecord
         return [
             [['user_id', 'event_status', 'created_at'], 'required'],
             [['user_id'], 'integer'],
-            [['event_status'], 'string'],
+            [['event_status', 'contact_id'], 'string'],
         ];
     }
 
