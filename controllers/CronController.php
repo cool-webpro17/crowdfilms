@@ -24,7 +24,7 @@ class CronController extends Controller
             'verbs' => [
                 'class' => \yii\filters\VerbFilter::className(),
                 'actions' => [
-                    'formula_prices' => ['post'],
+                    'refresh_token' => ['get'],
                 ],
             ],
         ];
