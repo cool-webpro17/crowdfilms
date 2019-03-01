@@ -58,11 +58,11 @@ class CronController extends Controller
         $token->refresh_token = 'test';
         $token->save();
     }
-//
-//    public function run() {
-//        $token = new TOken();
-//        $token->access_token = 'test';
-//        $token->refresh_token = 'test';
-//        $token->save();
-//    }
+
+    public function actionRefresh_token() {
+        $token = new Token();
+        $token->access_token = 'test_access_token';
+        $token->refresh_token = 'test_refresh_token';
+        $token->save();
+    }
 }
