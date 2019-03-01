@@ -60,9 +60,29 @@ class CronController extends Controller
     }
 
     public function actionRefresh_token() {
-        $token = new Token();
-        $token->access_token = 'test_access_token';
-        $token->refresh_token = 'test_refresh_token';
+        $clientId = '960432c85b09d5c20ede10bd8e765e8a';
+        $clientSecret = 'faf5db970b0cf6a67f79f44e42edfc39';
+
+        $token = Token::find()->one();
+        $accessToken = $token->access_token;
+        $refreshToken = $token->refresh_token;
+
+        $refreshCh = curl_init();
+        curl_setopt($refreshCh, CURLOPT_URL, 'https://app.teamleader.eu/oauth2/access_token');
+        curl_setopt($refreshCh, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($refreshCh, CURLOPT_POST, true);
+        curl_setopt($refreshCh, CURLOPT_POSTFIELDS, [
+            "client_id" => $clientId,
+            "client_secret" => $clientSecret,
+            "refresh_token" => $refreshToken,
+            "grant_type" => "refresh_token",
+        ]);
+        $refreshResponse = curl_exec($refreshCh);
+        $refreshData = json_decode($refreshResponse, true);
+
+        $token->access_token = $refreshResponse['access_token'];
+        $token->refresh_token = $refreshResponse['refresh_token'];
+
         $token->save();
     }
 }

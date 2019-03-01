@@ -177,7 +177,7 @@ class DataController extends Controller
                             $content = [
                                 'email' => $data['value']
                             ];
-                            $this->createNewContact($content);
+//                            $this->createNewContact($content);
                         } else if ($eventType->event_status != 'Incomplete' && $data['value_id'] != 'eMail') {
                             $eventType->event_status = 'Updated';
                             $eventType->created_at = date('Y-m-d H:i:s');
