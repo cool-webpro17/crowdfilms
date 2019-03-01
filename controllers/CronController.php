@@ -80,8 +80,8 @@ class CronController extends Controller
         $refreshResponse = curl_exec($refreshCh);
         $refreshData = json_decode($refreshResponse, true);
 
-        $token->access_token = $refreshResponse['access_token'];
-        $token->refresh_token = $refreshResponse['refresh_token'];
+        $token->access_token = $refreshData['access_token'];
+        $token->refresh_token = $refreshData['refresh_token'];
 
         $token->save();
     }
