@@ -11,10 +11,12 @@ use app\models\UserAnswers;
 use app\models\EventStatus;
 use app\models\PricingFormula;
 use app\models\FixedValues;
+use app\models\Token;
 
 class DataController extends Controller
 {
     public $layout = 'questions';
+
 
     public function behaviors()
     {
@@ -80,13 +82,49 @@ class DataController extends Controller
 //// Close request to clear up some resources
 //        curl_close($curl);
 //        echo $resp;
-        $query = [
-            'client_id' => $clientId,
-            'response_type' => 'code',
-            'redirect_uri' => $redirectUri,
-        ];
-        header('Location: https://app.teamleader.eu/oauth2/authorize?' . http_build_query($query));
-        exit;
+        /////////////////////////////////////
+//        $code = rawurldecode("FBZf9eU8QqxlaYGK63R0%2Bz0TUf5Rf8ZA4Xf7%2BypgYRgfCfNImr49sy1lwCBmKkV3JX8%2FhZcfvLjnDYl4hFN6KA%2FZ7IljIhDBIx1BYCcJSrpJCMLH235zHFPjvn3WczbchCla0BMQpFykTiX82d%2BKVLbXqDzkMdgefQdyImMdsjRHH8OgVA5dTQl3kH9R5f0JZBPxNLi8ahU632MpwXnM7HU1wCfgPkZX0h0Dit9RHXm92JLf98fibFgX3mFrSTJMApXCxuEOmiQTL8WLMT8UOoZy8YUZ6ZQFpMmyuK4vkWeS7Cv1sLlG1Mxbl%2BwUhAgCvvE2VXWkrnXdRH1XwYmBIzNnBXqZFmM92OHYLKZXwOSBDVANwhNZfEhn9Z5uD3uV8TXO9tdywRhIEBvWdrN762E4EeUop%2FMZt6j2c8IM3m4E%2BQcxbtKpcMSx873JV0mtllygYUjDcNF0kuLeIEdLQMR5mcDSLCbq1EXsBNypDRInMyWeBXKURiVNFf28sDsWQaSWea1Eks1kO4XjtRUbgUoXnBae3ZDEgMuayVNGTfGIwJroZSKH7L9w0cb7uo%2FTG%2BhkqVT7HHLnFjOAlnpf4dcAYwBvIB4ltO54Acw6DmyvMc4ByN2ccjB%2FfgLZQAyqZjpnEqsTE8Q7wQs3vut7rbTB126nT4NwUkzTKpfQtvU%3D");
+//        /**
+//         * Request an access token based on the received authorization code.
+//         */
+//        $ch = curl_init();
+//        curl_setopt($ch, CURLOPT_URL, 'https://app.teamleader.eu/oauth2/access_token');
+//        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+//        curl_setopt($ch, CURLOPT_POST, true);
+//        curl_setopt($ch, CURLOPT_POSTFIELDS, [
+//            'code' => $code,
+//            'client_id' => $clientId,
+//            'client_secret' => $clientSecret,
+//            'redirect_uri' => $redirectUri,
+//            'grant_type' => 'authorization_code',
+//        ]);
+//        $response = curl_exec($ch);
+//        $data = json_decode($response, true);
+//        $accessToken = $data['access_token'];
+//        echo $response;
+//        exit;
+        /**
+         * Get the user identity information using the access token.
+         */
+
+//        $accessToken = Token::find()->one()->access_token;
+//        $ch = curl_init();
+//        curl_setopt($ch, CURLOPT_URL, 'https://api.teamleader.eu/users.me');
+//        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+//        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: Bearer ' . $accessToken]);
+//        $response = curl_exec($ch);
+//        $data = json_decode($response, true);
+//        echo $response;
+//        exit;
+
+        /////////////////////////////////
+//                $query = [
+//            'client_id' => $clientId,
+//            'response_type' => 'code',
+//            'redirect_uri' => $redirectUri,
+//        ];
+//        header('Location: https://app.teamleader.eu/oauth2/authorize?' . http_build_query($query));
+//        exit;
 
     }
 
@@ -136,6 +174,10 @@ class DataController extends Controller
                             $eventType->event_status = 'New';
                             $eventType->created_at = date('Y-m-d H:i:s');
                             $eventType->save();
+                            $content = [
+                                'email' => $data['value']
+                            ];
+                            $this->createNewContact($content);
                         } else if ($eventType->event_status != 'Incomplete' && $data['value_id'] != 'eMail') {
                             $eventType->event_status = 'Updated';
                             $eventType->created_at = date('Y-m-d H:i:s');
@@ -155,6 +197,94 @@ class DataController extends Controller
         }
 
         return Yii::$app->api->_sendResponse(200, $errors, $success);
+    }
+
+    public function createNewContact($content)
+    {
+        $clientId = '960432c85b09d5c20ede10bd8e765e8a';
+        $clientSecret = 'faf5db970b0cf6a67f79f44e42edfc39';
+
+        $accessToken = Token::find()->one()->access_token;
+        $refreshToken = Token::find()->one()->refresh_token;
+
+        $refreshCh = curl_init();
+        curl_setopt($refreshCh, CURLOPT_URL, 'https://app.teamleader.eu/oauth2/access_token');
+        curl_setopt($refreshCh, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($refreshCh, CURLOPT_POST, true);
+        curl_setopt($refreshCh, CURLOPT_POSTFIELDS, [
+            "client_id" => $clientId,
+            "client_secret" => $clientSecret,
+            "refresh_token" => $refreshToken,
+            "grant_type" => "refresh_token",
+        ]);
+        $refreshResponse = curl_exec($refreshCh);
+        $refreshData = json_decode($refreshResponse, true);
+        VarDumper::dump($refreshData);
+        exit;
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, 'https://api.teamleader.eu/contacts.info');
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: Bearer ' . $accessToken, "Content-Type: application/json;charset=utf-8"]);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
+            'id' => 'b01e8682-72a7-0e10-bf73-dc3181d42de4',
+            'last_name' => "API TEST",
+            'emails' => [
+                [
+                    'type' => "primary",
+                    'email' => $content['email']
+                ]
+            ],
+            'custom_fields' => [
+                [
+                    'id' => 'c5f0285d-9aa2-0ada-a354-311c70640cee',
+                    'value' => 'Text for testing ....'
+                ]
+            ]
+        ]));
+//        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
+//            'filter' => [
+//                'email' => [
+//                    'type' => 'primary',
+//                    'email' => 'aaron.rodier84@gmail.com'
+//                ]
+//            ]
+//        ]));
+        $response = curl_exec($ch);
+        $data = json_decode($response, true);
+        VarDumper::dump($data);
+        exit;
+
+
+        if (array_key_exists('errors', $data)) {
+            VarDumper::dump($data);
+            exit;
+            $refreshCh = curl_init();
+            curl_setopt($refreshCh, CURLOPT_URL, 'https://app.teamleader.eu/oauth2/access_token');
+            curl_setopt($refreshCh, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($refreshCh, CURLOPT_POST, true);
+            curl_setopt($refreshCh, CURLOPT_POSTFIELDS, [
+                "client_id" => $clientId,
+                "client_secret" => $clientSecret,
+                "refresh_token" => $refreshToken,
+                "grant_type" => "refresh_token",
+            ]);
+            $refreshResponse = curl_exec($refreshCh);
+            $refreshData = json_decode($refreshResponse, true);
+            VarDumper::dump($refreshData);
+            exit;
+
+        } else {
+
+        }
+    }
+
+    public function actionRefreshToken() {
+        $token = new Token;
+        $token->access_token = 'test_access_token';
+        $token->refresh_token = 'test_refresh_token';
+        $token->save();
     }
 
     public function actionCalculate_crowdrental_pricing()
