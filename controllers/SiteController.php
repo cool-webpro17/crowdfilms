@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use yii\filters\AccessControl;
+use yii\helpers\VarDumper;
 use yii\web\Controller;
 use yii\web\Response;
 use yii\filters\VerbFilter;
@@ -72,6 +73,7 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+        date_default_timezone_set('Europe/Berlin');
         return $this->render('index');
     }
 
@@ -95,7 +97,6 @@ class SiteController extends Controller
     public function actionAanvraag()
     {
         $cookies = Yii::$app->utils->handleCookies();
-        
         $fixedValues = Yii::$app->utils->mapArray(FixedValues::find()->all());
 
         $previousAnswers = UserAnswers::find()->where(['user_id' => $cookies['user_id']->value])->all();

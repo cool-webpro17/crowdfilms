@@ -623,9 +623,8 @@
                 </div>
             </div>
             <div class="w-row">
-                <div class="w-embed"><a href="#" class="button w-button answer-button" data-id="grandTotalChoice"
-                                        data-answer="No" onclick="saveForm(this);sendEmail()" data-next="confirmSave">Aanvraag
-                        insturen</a></div>
+                <div class="w-embed"><a href="#" class="button w-button"
+                                        onclick="saveForm(this);sendEmail()" data-next="confirmSave">Aanvraag insturen</a></div>
             </div>
         </div>
         <div id="confirmSave" class="formcontainer question-container hide-section">

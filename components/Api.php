@@ -159,7 +159,6 @@ class Api extends Component
             header('Content-type: ' . $content_type);
             echo json_encode($arr);
         }
-        die();
         Yii::$app->end();
     }
 

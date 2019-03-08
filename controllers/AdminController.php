@@ -6,6 +6,7 @@ use phpDocumentor\Reflection\DocBlock\Tags\Param;
 use Yii;
 use yii\web\Controller;
 use yii\web\Response;
+
 use app\models\Question;
 use app\models\UserAnswers;
 use app\models\UploadForm;
@@ -18,6 +19,9 @@ use app\models\EventType;
 use app\models\FilmType;
 use app\models\CustomerType;
 use app\models\FormulaRule;
+use app\models\Project;
+use app\models\ProjectStatus;
+
 use yii\web\UploadedFile;
 use yii2tech\csvgrid\CsvGrid;
 use yii\data\ArrayDataProvider;
@@ -60,7 +64,12 @@ class AdminController extends Controller
                             'remove_type' => ['post'],
                             'save_formula_rule' => ['post'],
                             'remove_formula_rule' => ['post'],
-                            'film_formula' => ['post']
+                            'film_formula' => ['post'],
+                            'convert_project' => ['post'],
+                            'project_details' => ['post'],
+                            'add_project_status' => ['post'],
+                            'remove_project_status' => ['post'],
+                            'save_project' => ['post']
                         ],
                         'allow' => false,
                     ]
@@ -233,40 +242,19 @@ class AdminController extends Controller
     public function actionUserlog()
     {
         $model = new UploadForm;
-        $userAnswers = UserAnswers::find()->all();
-        $userAnswers = ArrayHelper::index($userAnswers, null, 'user_id');
+        $userAnswers = UserAnswers::find()->where(['answer_type' => 'Event'])->all();
+        $userAnswers = ArrayHelper::index($userAnswers, null, 'group_id');
         $eventTypes = EventStatus::find()->orderBy(['created_at' => SORT_DESC])->all();
 
-//        $eventTypes = ArrayHelper::index($eventTypes, null, 'user_id');
-
-
-        foreach ($userAnswers as $key => &$userAnswer) {
-            forEach ($userAnswer as $row) {
-
-                if ($row->value_id == 'eMail') {
-                    forEach ($userAnswers as $compareKey => $compareAnswer) {
-                        forEach ($compareAnswer as $compareRow) {
-
-                            if ($compareRow->value_id == 'eMail') {
-
-                                if ($compareRow->value == $row->value && $compareKey != $key) {
-                                    $userAnswers[$key] = array_merge($userAnswers[$key], $userAnswers[$compareKey]);
-                                    unset($userAnswers[$compareKey]);
-                                }
-                            }
-                        }
-                    }
+        foreach ($userAnswers as &$eachGroup) {
+            $eachGroup['exist'] = false;
+            foreach ($eachGroup as $row) {
+                if ($row->value_id == 'eMail' && UserAnswers::find()->where(['value_id' => 'eMail', 'value' => $row->value, 'answer_type' => 'Project'])->one()) {
+                    $eachGroup['exist'] = true;
                 }
             }
         }
 
-        foreach ($userAnswers as $key => &$userAnswer) {
-
-            foreach ($userAnswer as $rowKey => $row) {
-                $userAnswers[$key][$rowKey] = $this->object_to_array($userAnswers[$key][$rowKey]);
-            }
-
-        }
 
         $vars = [
             'cookies' => Yii::$app->request->cookies,
@@ -282,6 +270,102 @@ class AdminController extends Controller
         } else {
             return $this->render('userlog', $vars);
         }
+    }
+
+    public function actionProject()
+    {
+        $model = new UploadForm;
+        $userAnswers = UserAnswers::find()->where(['answer_type' => 'Project'])->all();
+        $userAnswers = ArrayHelper::index($userAnswers, null, 'group_id');
+        $projects = Project::find()->orderBy(['created_at' => SORT_DESC])->all();
+        $projectStatus = ProjectStatus::find()->all();
+
+        $vars = [
+            'cookies' => Yii::$app->request->cookies,
+            'model' => $model,
+            'action' => Yii::$app->session->get('admin'),
+            'username' => Yii::$app->session->get('username'),
+            'userAnswers' => $userAnswers,
+            'projects' => $projects,
+            'projectStatus' => $projectStatus
+        ];
+
+        if (Yii::$app->session->get('admin') == null || Yii::$app->session->get('admin') == 'adminLocked') {
+            return $this->render('adminLocked', $vars);
+        } else {
+            return $this->render('project', $vars);
+        }
+    }
+
+    public function actionProject_details()
+    {
+        $data = Yii::$app->api->handleRequest();
+        $vars['key'] = $data['key'];
+
+        return $this->redirect(['admin/projectdetails', 'key' => $data['key']]);
+    }
+
+    public function actionProjectdetails() {
+        $request = Yii::$app->request;
+        $userId = $request->get('key');
+        $project = Project::find()->where(['user_id' => $userId])->one();
+        $projectStatus = ProjectStatus::find()->all();
+        $vars = [
+            'user_id' => $userId,
+            'project' => $project,
+            'projectStatus' => $projectStatus
+        ];
+
+        if (Yii::$app->session->get('admin') == null || Yii::$app->session->get('admin') == 'adminLocked') {
+            return $this->render('adminLocked', $vars);
+        } else {
+            return $this->render('projectdetails', $vars);
+        }
+    }
+
+    public function actionAdd_project_status() {
+        $data = Yii::$app->api->handleRequest();
+
+        if ($data['statusId'] == 0) {
+            $projectStatus = new ProjectStatus();
+            $projectStatus->status = $data['status'];
+            $projectStatus->save();
+        } else {
+            $projectStatus = ProjectStatus::find()->where(['id' => $data['statusId']])->one();
+            $projectStatus->status = $data['status'];
+            $projectStatus->save();
+        }
+        return $this->redirect(['admin/project']);
+    }
+
+    public function actionRemove_project_status() {
+        $data = Yii::$app->api->handleRequest();
+        $projectStatus = ProjectStatus::find()->where(['id' => $data['statusId']])->one();
+        $projectStatus->delete();
+        return $this->redirect(['admin/project']);
+    }
+
+    public function actionSave_project() {
+        $data = Yii::$app->api->handleRequest();
+
+        $project = Project::find()->where(['user_id' => $data['user_id']])->one();
+
+        $project->project_title = $data['project_title'];
+        $project->live_status = $data['live_status'];
+        $project->contact_name = $data['contact_name'];
+        $project->contact_email = $data['contact_email'];
+        $project->contact_phone = $data['contact_phone'];
+        $project->contact_comment = $data['contact_comment'];
+        $project->project_description = $data['project_description'];
+        $project->project_status = $data['project_status'];
+        $project->total_price = $data['total_price'];
+        $project->price_description = $data['price_description'];
+        $project->payment_due = $data['payment_due'];
+        $project->already_paid = $data['already_paid'];
+        $project->created_at = date('Y-m-d H:i:s');
+        $project->save();
+
+        return $this->redirect(['admin/project']);
     }
 
     public function object_to_array($data)
@@ -421,7 +505,10 @@ class AdminController extends Controller
     {
         $model = new UploadForm;
         $data = Yii::$app->api->handleRequest();
-        $vars = ['cookies' => Yii::$app->request->cookies, 'model' => $model, 'action' => Yii::$app->session->get('admin'), 'dataProvider' => $dataProvider, 'username' => Yii::$app->session->get('username')];
+        $vars = ['cookies' => Yii::$app->request->cookies,
+            'model' => $model,
+            'action' => Yii::$app->session->get('admin'),
+            'username' => Yii::$app->session->get('username')];
 //        $vars['userAnswer'] = $data['userAnswer'];
         $vars['key'] = $data['key'];
 
@@ -435,42 +522,43 @@ class AdminController extends Controller
 
         $statusType = StatusType::find()->all();
 
-        $userAnswers = UserAnswers::find()->all();
-        $userAnswers = ArrayHelper::index($userAnswers, null, 'user_id');
-
+        $userAnswers = UserAnswers::find()->where(['group_id' => $userId])->all();
         $eventType = EventStatus::find()->where(['user_id' => $userId])->one();
 
+//        $userAnswers = ArrayHelper::index($userAnswers, null, 'user_id');
+//
+//
+//        foreach ($userAnswers as $key => &$userAnswer) {
+//            forEach ($userAnswer as $row) {
+//
+//                if ($row->value_id == 'eMail' && $row->answer_type == 'Event') {
+//                    forEach ($userAnswers as $compareKey => $compareAnswer) {
+//                        forEach ($compareAnswer as $compareRow) {
+//
+//                            if ($compareRow->value_id == 'eMail' && $row->answer_type == 'Event') {
+//
+//                                if ($compareRow->value == $row->value && $compareKey != $key) {
+//                                    $userAnswers[$key] = array_merge($userAnswers[$key], $userAnswers[$compareKey]);
+//                                    unset($userAnswers[$compareKey]);
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//
+//        foreach ($userAnswers as $key => &$userAnswer) {
+//            foreach ($userAnswer as $rowKey => $row) {
+//                $userAnswers[$key][$rowKey] = $this->object_to_array($userAnswers[$key][$rowKey]);
+//            }
+//        }
 
-        foreach ($userAnswers as $key => &$userAnswer) {
-            forEach ($userAnswer as $row) {
-
-                if ($row->value_id == 'eMail') {
-                    forEach ($userAnswers as $compareKey => $compareAnswer) {
-                        forEach ($compareAnswer as $compareRow) {
-
-                            if ($compareRow->value_id == 'eMail') {
-
-                                if ($compareRow->value == $row->value && $compareKey != $key) {
-                                    $userAnswers[$key] = array_merge($userAnswers[$key], $userAnswers[$compareKey]);
-                                    unset($userAnswers[$compareKey]);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        foreach ($userAnswers as $key => &$userAnswer) {
-            foreach ($userAnswer as $rowKey => $row) {
-                $userAnswers[$key][$rowKey] = $this->object_to_array($userAnswers[$key][$rowKey]);
-            }
-        }
 
         $vars = ['cookies' => Yii::$app->request->cookies,
             'action' => Yii::$app->session->get('admin'),
             'username' => Yii::$app->session->get('username'),
-            'userAnswer' => $userAnswers[$userId],
+            'userAnswer' => $userAnswers,
             'key' => $userId,
             'eventType' => $eventType,
             'statusType' => $statusType
@@ -646,6 +734,28 @@ class AdminController extends Controller
         $statusType->delete();
 
         return $this->redirect(['admin/settings']);
+    }
+
+    public function actionConvert_project() {
+        $data = Yii::$app->api->handleRequest();
+
+        $event = EventStatus::find()->where(['user_id' => $data['user_id']])->one();
+        $project = new Project();
+        $project->user_id = $event->user_id;
+        $project->project_status = 'No';
+        $project->contact_id = $event->contact_id;
+        $project->created_at = date('Y-m-d H:i:s');
+        $project->save();
+        $event->delete();
+
+        $userAnswers = UserAnswers::find()->where(['group_id' => $data['user_id']])->all();
+
+        foreach ($userAnswers as $eachAnswer) {
+            $eachAnswer->answer_type = 'Project';
+            $eachAnswer->save();
+        }
+
+        return $this->redirect(['admin/userlog']);
     }
 
     public function actionExport()

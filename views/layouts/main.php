@@ -46,8 +46,8 @@ Asset::register($this);
         }(window, document);</script>
     <link href="/images/favicon-32x32.png" rel="shortcut icon" type="image/x-icon">
     <link href="/images/favicon-256x256.png" rel="apple-touch-icon">
-<!--    <link href="https://daks2k3a4ib2z.cloudfront.net/img/favicon.ico" rel="shortcut icon" type="image/x-icon">-->
-<!--    <link href="https://daks2k3a4ib2z.cloudfront.net/img/webclip.png" rel="apple-touch-icon">-->
+    <!--    <link href="https://daks2k3a4ib2z.cloudfront.net/img/favicon.ico" rel="shortcut icon" type="image/x-icon">-->
+    <!--    <link href="https://daks2k3a4ib2z.cloudfront.net/img/webclip.png" rel="apple-touch-icon">-->
     <link href="/css/custom.css" rel="stylesheet" type="text/css">
 
     <?= Html::csrfMetaTags() ?>
@@ -99,6 +99,7 @@ Asset::register($this);
                                     ["label" => "Pricing", "url" => ["admin/pricing"], "icon" => "usd"],
                                     ["label" => "Settings", "url" => "/admin/settings", "icon" => "gear"],
                                     ["label" => "Userlog", "url" => ["admin/userlog"], "icon" => "user"],
+                                    ["label" => "Project", "url" => ["admin/project"], "icon" => "tasks"],
                                     ["label" => "Formula", "url" => ["admin/formula"], "icon" => "file"],
                                     ["label" => "Formula Rule", "url" => ["admin/formula_rule"], "icon" => "calculator"],
                                     ["label" => "Logout", "url" => ["admin/logout"], "icon" => "sign-out"],
@@ -135,8 +136,9 @@ Asset::register($this);
                                 </li>
                                 <li><a href="/admin/settings"> Settings</a>
                                 </li>
-                                <li><a href="/admin/userlog"> Userlog</a>
-                                <li><a href="/admin/formula"> Formula</a>
+                                <li><a href="/admin/userlog"> Userlog</a></li>
+                                <li><a href="/admin/project"> Project</a></li>
+                                <li><a href="/admin/formula"> Formula</a></li>
                                 <li><a href="/admin/formula_rule"> Formula Rule</a>
                                 </li>
                                 <li><a href="/admin/logout"><i class="fa fa-sign-out pull-right"></i> Log Out</a>

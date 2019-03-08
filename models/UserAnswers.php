@@ -31,8 +31,8 @@ class UserAnswers extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'value', 'value_id', 'created_at'], 'required'],
-            [['user_answer_id', 'user_id'], 'integer'],
+            [['user_id', 'value', 'value_id', 'group_id', 'answer_type', 'created_at'], 'required'],
+            [['user_answer_id', 'user_id', 'group_id'], 'integer'],
             [['value', 'value_id'], 'string'],
             [['user_answer_id'], 'unique'],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'user_id']],

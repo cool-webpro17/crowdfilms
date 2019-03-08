@@ -37,42 +37,44 @@ $export_options = Yii::$app->params['adminTools']['export'];
             </thead>
             <tbody class="tbody-fixed">
             <?php foreach ($eventTypes as $eachEvent):
-
-            foreach ($userAnswers as $key => $userAnswer):
                 ?>
-                <?php if ($key == $eachEvent->user_id):?>
+
                 <tr>
                     <td style="vertical-align: middle;">
                         <?php
                         $existFlag = false;
-                        foreach ($userAnswer as $row):
+                        foreach ($userAnswers[$eachEvent->user_id] as $row):
                             ?>
-                            <?php if ($row['value_id'] == 'eMail'):
+
+                            <?php if ($row['value_id'] == 'eMail') {
                             echo $row['value'];
                             $existFlag = true;
+                            if ($userAnswers[$eachEvent->user_id]['exist']) {
+                                echo ' (Returning Customer)';
+                            }
                             break;
-                        endif; ?>
+                        }?>
+
                             <?php
                         endforeach;
 
                         ?>
                         <?php
                         if ($existFlag == false):
-                            echo $userAnswer[count($userAnswer) - 1]['created_at'];
+                            echo $userAnswers[$eachEvent->user_id][count($userAnswers[$eachEvent->user_id]) - 2]['created_at'];
                         endif;
                         ?>
                     </td>
                     <td style="vertical-align: middle;">
                         <?php
-                            echo $eachEvent->event_status;
+                        echo $eachEvent->event_status;
                         ?>
                     </td>
                     <td>
-                        <a class="btn btn-success" onclick="eventDetails(<?php echo ($key); ?>)">Details</a>
+                        <a class="btn btn-success" onclick="eventDetails(<?php echo($eachEvent->user_id); ?>)">Details</a>
                     </td>
                 </tr>
-                <?php endif;
-            endforeach;
+                <?php
             endforeach; ?>
             </tbody>
         </table>
@@ -95,7 +97,7 @@ $export_options = Yii::$app->params['adminTools']['export'];
         });
     }
     function eventDetails(key) {
-        console.log ('key', key);
+        console.log('key', key);
         console.log('log ', <?php echo json_encode($userAnswers) ?>);
         var userAnswers = <?php echo json_encode($userAnswers) ?>;
         console.log('log', userAnswers[key]);

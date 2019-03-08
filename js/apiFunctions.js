@@ -64,6 +64,7 @@ function saveForm(element, callback)
             anyInput = true;
         }
     });
+    console.log('test', callback);
 
     if(anyInput)
     {
@@ -76,6 +77,7 @@ function saveForm(element, callback)
 
 function calculateGrand()
 {
+    console.log('calculate');
     var updatePrices = function(data)
     {
         console.log('data', data);
@@ -202,8 +204,10 @@ $(document).ready(function(){
             {
                 if(next == 'calculate')
                 {
+                    console.log('123');
                     $('#eMail').css("display", "none");
                     calculateGrand();
+                    console.log('456');
                     $(document).find("input[data-id='email']").val($(document).find("input[data-id='eMail']").val());
                 } else if (next == 'crowdFunders') {
                     var hours = $(document).find("input[data-id='hours']");

@@ -2,10 +2,14 @@
 
 namespace app\controllers;
 
+use app\models\User;
+use cookies;
 use Symfony\Component\EventDispatcher\Event;
 use Yii;
+use yii\debug\models\UserSwitch;
 use yii\filters\AccessControl;
 use yii\web\Controller;
+use yii\web\Cookie;
 use yii\web\Response;
 use yii\helpers\VarDumper;
 use yii\helpers\ArrayHelper;
@@ -15,6 +19,8 @@ use app\models\EventStatus;
 use app\models\PricingFormula;
 use app\models\FixedValues;
 use app\models\Token;
+use app\models\Project;
+use yii\debug\controllers\UserController;
 
 class DataController extends Controller
 {
@@ -150,11 +156,20 @@ class DataController extends Controller
                 $model = new UserAnswers();
                 $model->attributes = $data;
                 $model->created_at = date('Y-m-d H:i:s');
+                $model->answer_type = "Event";
                 $model->user_id = $cookies['user_id']->value;
+
+                if (UserAnswers::find()->where(['user_id' => $cookies['user_id']->value])->one()) {
+                    $model->group_id = UserAnswers::find()->where(['user_id' => $cookies['user_id']->value])->one()->group_id;
+                } else {
+                    $model->group_id = $cookies['user_id']->value;
+                }
+
+
 
                 $eventType = EventStatus::find()->where(['user_id' => $cookies['user_id']->value])->one();
                 if ($eventType == null) {
-                    if ($data['value_id'] == 'eMail' && UserAnswers::find()->where(['value' => $data['value']])->one() != null) {
+                    if ($data['value_id'] == 'eMail' && UserAnswers::find()->where(['value' => $data['value'], 'answer_type' => 'Event'])->one() != null) {
                         $eventType = EventStatus::find()->where(['user_id' => UserAnswers::find()->where(['value' => $data['value']])->one()->user_id])->one();
                         $eventType->event_status = 'Updated';
                         $eventType->created_at = date('Y-m-d H:i:s');
@@ -172,16 +187,74 @@ class DataController extends Controller
                         $eventType->save();
                     }
                 } else {
-                    if ($data['value_id'] == 'eMail' && UserAnswers::find()->where(['value' => $data['value']])->one() != null) {
-                        $eventType = EventStatus::find()->where(['user_id' => UserAnswers::find()->where(['value' => $data['value']])->one()->user_id])->one();
-                        $eventType->event_status = 'Updated';
-                        $eventType->created_at = date('Y-m-d H:i:s');
-                        if ($eventType->save()) {
+                    if ($data['value_id'] == 'eMail' && UserAnswers::find()->where(['value_id' => 'eMail', 'value' => $data['value'], 'answer_type' => 'Event'])->one() != null) {
+                        $oldEvent = EventStatus::find()->where(['user_id' => UserAnswers::find()->where(['value' => $data['value'], 'answer_type' => 'Event'])->one()->user_id])->one();
+                        $oldEvent->event_status = 'Updated';
+                        $oldEvent->created_at = date('Y-m-d H:i:s');
+                        if ($oldEvent->save()) {
                             $content = [
-                                'user_id' => $eventType->user_id
+                                'user_id' => $oldEvent->user_id
                             ];
                             $this->updateContact($content);
                         }
+
+                        $model->group_id = $oldEvent->user_id;
+
+                        $userAnswers = UserAnswers::find()->where(['user_id' => $cookies['user_id']->value])->all();
+                        foreach ($userAnswers as $eachAnswer) {
+                            $eachAnswer->group_id = $oldEvent->user_id;
+                            $eachAnswer->save();
+                        }
+                        $eventType->delete();
+                    } else if ($data['value_id'] == 'email') {
+                        $project = new Project();
+                        $project->user_id = $eventType->user_id;
+                        $project->contact_id = $eventType->contact_id;
+                        $project->live_status = "No";
+                        $project->project_status = "New";
+                        $project->contact_name = UserAnswers::find()->where(['group_id' => $eventType->user_id, 'value_id' => 'eMail'])->orderBy(['created_at' => SORT_DESC])->one()->value;
+                        $project->contact_email = UserAnswers::find()->where(['group_id' => $eventType->user_id, 'value_id' => 'eMail'])->orderBy(['created_at' => SORT_DESC])->one()->value;
+                        $project->contact_phone = UserAnswers::find()->where(['group_id' => $eventType->user_id, 'value_id' => 'tel'])->orderBy(['created_at' => SORT_DESC])->one()->value;
+                        $project->contact_comment = UserAnswers::find()->where(['group_id' => $eventType->user_id, 'value_id' => 'comment'])->orderBy(['created_at' => SORT_DESC])->one()->value;
+                        $project->total_price = UserAnswers::find()->where(['group_id' => $eventType->user_id, 'value_id' => 'grandTotal'])->orderBy(['created_at' => SORT_DESC])->one()->value;
+                        $project->already_paid = "0";
+                        $project->created_at = date('Y-m-d H:i:s');
+                        $project->save();
+                        $eventType->delete();
+
+                        $model->answer_type = 'Project';
+                        $model->group_id = UserAnswers::find()->where(['user_id' => $cookies['user_id']->value, 'value_id' => 'eMail'])->one()->group_id;
+
+                        $userAnswers = [];
+                        $projectAnswer = UserAnswers::find()->where(['user_id' => $project->user_id, 'value_id' => 'eMail'])->one();
+                        $allAnswers = UserAnswers::find()->all();
+                        foreach ($allAnswers as $eachAnswer) {
+                            if ($eachAnswer->answer_type == 'Event') {
+                                if (UserAnswers::find()->where(['user_id' => $eachAnswer->user_id, 'value_id' => 'eMail'])->one()->value == $projectAnswer->value) {
+                                    $userAnswers[] = $eachAnswer;
+                                }
+                            }
+                        }
+
+                        foreach ($userAnswers as $eachAnswer) {
+                            $eachAnswer->answer_type = 'Project';
+                            $eachAnswer->save();
+                        }
+
+                        /*
+                         * This is the code to set user_id cookie
+                         * Start
+                         */
+
+                        $user = new User();
+                        $user->save();
+
+                        Yii::$app->utils->setCookie('user_id', $user->getPrimaryKey());
+
+                        /*
+                         * This is the code to set user_id cookie
+                         * End
+                         */
                     } else {
                         if ($data['value_id'] == 'eMail') {
                             $eventType->event_status = 'New';
@@ -205,9 +278,9 @@ class DataController extends Controller
                         }
                     }
                 }
-
                 $success = $success && $model->save();
                 $errors[] = $model->getErrors();
+
             }
 
             $transaction->commit();
@@ -224,33 +297,33 @@ class DataController extends Controller
         $accessToken = Token::find()->one()->access_token;
 
         $userAnswers = UserAnswers::find()->all();
-        $userAnswers = ArrayHelper::index($userAnswers, null, 'user_id');
+        $userAnswers = ArrayHelper::index($userAnswers, null, 'group_id');
 
-        foreach ($userAnswers as $key => &$userAnswer) {
-            forEach ($userAnswer as $row) {
-
-                if ($row->value_id == 'eMail') {
-                    forEach ($userAnswers as $compareKey => $compareAnswer) {
-                        forEach ($compareAnswer as $compareRow) {
-
-                            if ($compareRow->value_id == 'eMail') {
-
-                                if ($compareRow->value == $row->value && $compareKey != $key) {
-                                    $userAnswers[$key] = array_merge($userAnswers[$key], $userAnswers[$compareKey]);
-                                    unset($userAnswers[$compareKey]);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        foreach ($userAnswers as $key => &$userAnswer) {
-            foreach ($userAnswer as $rowKey => $row) {
-                $userAnswers[$key][$rowKey] = $this->object_to_array($userAnswers[$key][$rowKey]);
-            }
-        }
+//        foreach ($userAnswers as $key => &$userAnswer) {
+//            forEach ($userAnswer as $row) {
+//
+//                if ($row->value_id == 'eMail' && $row->answer_type == 'Event') {
+//                    forEach ($userAnswers as $compareKey => $compareAnswer) {
+//                        forEach ($compareAnswer as $compareRow) {
+//
+//                            if ($compareRow->value_id == 'eMail' && $row->answer_type == 'Event') {
+//
+//                                if ($compareRow->value == $row->value && $compareKey != $key) {
+//                                    $userAnswers[$key] = array_merge($userAnswers[$key], $userAnswers[$compareKey]);
+//                                    unset($userAnswers[$compareKey]);
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//
+//        foreach ($userAnswers as $key => &$userAnswer) {
+//            foreach ($userAnswer as $rowKey => $row) {
+//                $userAnswers[$key][$rowKey] = $this->object_to_array($userAnswers[$key][$rowKey]);
+//            }
+//        }
 
         $valueDetails = $userAnswers[$content['user_id']];
 
@@ -290,39 +363,40 @@ class DataController extends Controller
         $eventStatus->save();
     }
 
-    public function updateContact($content) {
+    public function updateContact($content)
+    {
         $accessToken = Token::find()->one()->access_token;
 
         $userAnswers = UserAnswers::find()->all();
-        $userAnswers = ArrayHelper::index($userAnswers, null, 'user_id');
+        $userAnswers = ArrayHelper::index($userAnswers, null, 'group_id');
 
         $eventStatus = EventStatus::find()->where(['user_id' => $content['user_id']])->one();
 
-        foreach ($userAnswers as $key => &$userAnswer) {
-            forEach ($userAnswer as $row) {
-
-                if ($row->value_id == 'eMail') {
-                    forEach ($userAnswers as $compareKey => $compareAnswer) {
-                        forEach ($compareAnswer as $compareRow) {
-
-                            if ($compareRow->value_id == 'eMail') {
-
-                                if ($compareRow->value == $row->value && $compareKey != $key) {
-                                    $userAnswers[$key] = array_merge($userAnswers[$key], $userAnswers[$compareKey]);
-                                    unset($userAnswers[$compareKey]);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        foreach ($userAnswers as $key => &$userAnswer) {
-            foreach ($userAnswer as $rowKey => $row) {
-                $userAnswers[$key][$rowKey] = $this->object_to_array($userAnswers[$key][$rowKey]);
-            }
-        }
+//        foreach ($userAnswers as $key => &$userAnswer) {
+//            forEach ($userAnswer as $row) {
+//
+//                if ($row->value_id == 'eMail' && $row->answer_type == 'Event') {
+//                    forEach ($userAnswers as $compareKey => $compareAnswer) {
+//                        forEach ($compareAnswer as $compareRow) {
+//
+//                            if ($compareRow->value_id == 'eMail' && $row->answer_type == 'Event') {
+//
+//                                if ($compareRow->value == $row->value && $compareKey != $key) {
+//                                    $userAnswers[$key] = array_merge($userAnswers[$key], $userAnswers[$compareKey]);
+//                                    unset($userAnswers[$compareKey]);
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//
+//        foreach ($userAnswers as $key => &$userAnswer) {
+//            foreach ($userAnswer as $rowKey => $row) {
+//                $userAnswers[$key][$rowKey] = $this->object_to_array($userAnswers[$key][$rowKey]);
+//            }
+//        }
 
         $valueDetails = $userAnswers[$content['user_id']];
 
@@ -414,11 +488,15 @@ class DataController extends Controller
         $totalPrice = PricingFormula::calculateTotalPrice($userAnswers);
         $formulaPrices = PricingFormula::calculateFormulaPrices($userAnswers);
 
-        $data = [
-            'grandTotal' => $totalPrice,
-        ];
+        $newUserAnswer = new UserAnswers();
+        $newUserAnswer->user_id = $user_id;
+        $newUserAnswer->value_id = 'grandTotal';
+        $newUserAnswer->value = (string)$totalPrice;
+        $newUserAnswer->group_id = UserAnswers::find()->where(['user_id' => $user_id])->one()->group_id;
+        $newUserAnswer->answer_type = 'Event';
+        $newUserAnswer->created_at = date('Y-m-d H:i:s');
 
-        $errors = UserAnswers::insertRows($user_id, $data);
+        $newUserAnswer->save();
 
         $returnData = [
             'grandTotal' => $totalPrice,
