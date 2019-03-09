@@ -742,10 +742,18 @@ class AdminController extends Controller
         $event = EventStatus::find()->where(['user_id' => $data['user_id']])->one();
         $project = new Project();
         $project->user_id = $event->user_id;
-        $project->project_status = 'No';
+        $project->live_status = 'No';
         $project->contact_id = $event->contact_id;
+        $project->project_status = "New";
+        $project->contact_name = UserAnswers::find()->where(['group_id' => $eventType->user_id, 'value_id' => 'eMail'])->orderBy(['created_at' => SORT_DESC])->one()->value;
+        $project->contact_email = UserAnswers::find()->where(['group_id' => $eventType->user_id, 'value_id' => 'eMail'])->orderBy(['created_at' => SORT_DESC])->one()->value;
+        $project->contact_phone = UserAnswers::find()->where(['group_id' => $eventType->user_id, 'value_id' => 'tel'])->orderBy(['created_at' => SORT_DESC])->one()->value;
+        $project->contact_comment = UserAnswers::find()->where(['group_id' => $eventType->user_id, 'value_id' => 'comment'])->orderBy(['created_at' => SORT_DESC])->one()->value;
+        $project->total_price = UserAnswers::find()->where(['group_id' => $eventType->user_id, 'value_id' => 'grandTotal'])->orderBy(['created_at' => SORT_DESC])->one()->value;
+        $project->already_paid = "0";
         $project->created_at = date('Y-m-d H:i:s');
         $project->save();
+        $errors = $project->getErrors();
         $event->delete();
 
         $userAnswers = UserAnswers::find()->where(['group_id' => $data['user_id']])->all();
