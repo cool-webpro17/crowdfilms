@@ -623,7 +623,7 @@
                 </div>
             </div>
             <div class="w-row">
-                <div class="w-embed"><a href="#" class="button w-button"
+                <div class="w-embed"><a href="#" class="button w-button save-form-button"
                                         onclick="saveForm(this);sendEmail()" data-next="confirmSave">Aanvraag insturen</a></div>
             </div>
         </div>

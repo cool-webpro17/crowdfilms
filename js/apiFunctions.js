@@ -193,7 +193,7 @@ $(document).ready(function(){
         }
     });
 
-    $(".firstformcontainer").on("click", ".answer-button, .next-button", function() {
+    $(".firstformcontainer").on("click", ".answer-button, .next-button, .save-form-button", function() {
     // $(".answer-button, .next-button").click(function(){
 
         var $button = $(this);
@@ -236,9 +236,12 @@ $(document).ready(function(){
                 }
             }
         }
-        else
+        else if ($button.hasClass("answer-button"))
         {
             saveValue($button.data("id"), $button.data("answer"));
+            nextQuestion($button, next);
+        }
+        else if ($button.hasClass("save-form-button")) {
             nextQuestion($button, next);
         }
 
