@@ -745,11 +745,11 @@ class AdminController extends Controller
         $project->live_status = 'No';
         $project->contact_id = $event->contact_id;
         $project->project_status = "New";
-        $project->contact_name = UserAnswers::find()->where(['group_id' => $eventType->user_id, 'value_id' => 'eMail'])->orderBy(['created_at' => SORT_DESC])->one()->value;
-        $project->contact_email = UserAnswers::find()->where(['group_id' => $eventType->user_id, 'value_id' => 'eMail'])->orderBy(['created_at' => SORT_DESC])->one()->value;
-        $project->contact_phone = UserAnswers::find()->where(['group_id' => $eventType->user_id, 'value_id' => 'tel'])->orderBy(['created_at' => SORT_DESC])->one()->value;
-        $project->contact_comment = UserAnswers::find()->where(['group_id' => $eventType->user_id, 'value_id' => 'comment'])->orderBy(['created_at' => SORT_DESC])->one()->value;
-        $project->total_price = UserAnswers::find()->where(['group_id' => $eventType->user_id, 'value_id' => 'grandTotal'])->orderBy(['created_at' => SORT_DESC])->one()->value;
+        $project->contact_name = UserAnswers::find()->where(['group_id' => $event->user_id, 'value_id' => 'eMail'])->orderBy(['created_at' => SORT_DESC])->one()->value;
+        $project->contact_email = UserAnswers::find()->where(['group_id' => $event->user_id, 'value_id' => 'eMail'])->orderBy(['created_at' => SORT_DESC])->one()->value;
+        $project->contact_phone = UserAnswers::find()->where(['group_id' => $event->user_id, 'value_id' => 'tel'])->orderBy(['created_at' => SORT_DESC])->one()->value;
+        $project->contact_comment = UserAnswers::find()->where(['group_id' => $event->user_id, 'value_id' => 'comment'])->orderBy(['created_at' => SORT_DESC])->one()->value;
+        $project->total_price = UserAnswers::find()->where(['group_id' => $event->user_id, 'value_id' => 'grandTotal'])->orderBy(['created_at' => SORT_DESC])->one()->value;
         $project->already_paid = "0";
         $project->created_at = date('Y-m-d H:i:s');
         $project->save();
